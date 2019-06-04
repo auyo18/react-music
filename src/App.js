@@ -1,10 +1,21 @@
 import React from 'react'
+import {BrowserRouter as Router} from 'react-router-dom'
+import routes from './routes'
+import Header from './components/Header'
+import Tab from './components/Tab'
+import './app.scss'
 
 function App() {
   return (
-    <div className="App">
-      聚力音乐
-    </div>
+    <Router>
+      <div className="app">
+        <Header/>
+        <Tab/>
+        {
+          routes
+        }
+      </div>
+    </Router>
   )
 }
 

@@ -1,0 +1,28 @@
+@import "../../assets/styles/variable";
+@import "../../assets/styles/mixin";
+
+.tabs {
+  @include flex();
+  justify-content: space-around;
+  font-size: $font-size-large + 2;
+
+  .tab {
+    background-color: $color-theme;
+    display: block;
+    width: 100%;
+    text-align: center;
+
+    span {
+      display: inline-block;
+      padding: 15px 0;
+    }
+
+    &.active {
+
+      span {
+        font-weight: bold;
+        border-bottom: 3px solid $color-text;
+      }
+    }
+  }
+}

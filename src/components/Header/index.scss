@@ -1,0 +1,26 @@
+@import "../../assets/styles/variable";
+@import "../../assets/styles/mixin";
+
+$height: 60px;
+.header {
+  @include flex();
+  justify-content: space-between;
+  align-items: center;
+  background-color: $color-theme;
+  padding: 0 10px;
+  height: $height;
+  line-height: $height;
+  color: $color-text;
+  font-size: $font-size-large-x;
+
+  .logo {
+    background-image: url("../../assets/images/logo.png");
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+  }
+
+  i.iconfont {
+    font-size: $font-size-large-xl;
+  }
+}

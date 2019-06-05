@@ -1,4 +1,7 @@
-.app {
-  max-width: 680px;
+@import "./assets/styles/variable";
+
+#app {
+  max-width: $max-width;
   margin: 0 auto;
+  position: relative;
 }

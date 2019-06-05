@@ -1,0 +1,6 @@
+const types = {
+  SET_RECOMMEND_SLIDER: 'SET_RECOMMEND_SLIDER',
+  SET_RECOMMEND_LIST: 'SET_RECOMMEND_LIST'
+}
+
+export default types

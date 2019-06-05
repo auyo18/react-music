@@ -1,0 +1,19 @@
+@import "../../assets/styles/variable";
+
+.loading-container {
+  position: fixed;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+
+  .loading {
+    width: 100%;
+    text-align: center;
+
+    .desc {
+      line-height: 30px;
+      font-size: $font-size-medium-x;
+      color: $color-text-l;
+    }
+  }
+}

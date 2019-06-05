@@ -1,0 +1,44 @@
+@import "../../assets/styles/variable";
+@import "../../assets/styles/mixin";
+
+.slider {
+  position: relative;
+  overflow: hidden;
+
+  .slider-group {
+    @include flex();
+
+    .slider-item {
+      width: 0;
+
+      img {
+        display: block;
+      }
+    }
+  }
+
+  .dots {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 12px;
+    text-align: center;
+    font-size: 0;
+
+    .dot {
+      display: inline-block;
+      margin: 0 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: $color-background-d;
+      transition: width .3s ease-out;
+
+      &.active {
+        width: 20px;
+        border-radius: 5px;
+        background: $color-background-dd;
+      }
+    }
+  }
+}

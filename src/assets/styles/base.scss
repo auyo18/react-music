@@ -22,3 +22,17 @@ a, body {
 img {
   max-width: 100%;
 }
+
+.scroll-view {
+  position: fixed;
+  width: 100%;
+  max-width: $max-width;
+  top: 103px;
+  bottom: 0;
+}
+
+.scroll-content {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}

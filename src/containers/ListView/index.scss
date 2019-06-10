@@ -1,0 +1,85 @@
+@import "../../assets/styles/mixin";
+
+.singer {
+  .singer-list {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+
+    .group {
+      .group-title {
+        background-color: $color-background-b;
+        padding: 10px;
+      }
+
+      .singer-info {
+        @include flex();
+        align-items: center;
+        padding: 10px 20px;
+        border-bottom: 1px solid $color-background-b;
+
+        dt {
+          width: 50px;
+          height: 50px;
+          border-radius: 50px;
+          overflow: hidden;
+        }
+
+        dd {
+          margin-left: 20px;
+          @include no-wrap();
+        }
+      }
+    }
+  }
+
+  .short-cut {
+    position: absolute;
+    right: 5px;
+    bottom: 40px;
+    background-color: #eee;
+    padding: 5px 0;
+    border-radius: 20px;
+    border: 1px solid #ededed;
+    z-index: 101;
+
+    dd {
+      font-size: $font-size-small;
+      text-align: center;
+      padding: 0 5px;
+      position: relative;
+
+      &.active {
+        font-weight: bold;
+        color: $color-theme-s;
+      }
+    }
+  }
+
+  .tip {
+    opacity: 0;
+    position: fixed;
+    background-color: $color-text;
+    top: 0;
+    right: 70px;
+    width: 40px;
+    height: 40px;
+    font-size: 26px;
+    color: $color-theme;
+    line-height: 40px;
+    border-radius: 20px;
+    text-align: center;
+    transition: opacity .5s;
+    z-index: 11;
+  }
+
+  .list-fixed {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: $color-background-b;
+    padding: 10px;
+    z-index: 9;
+  }
+}

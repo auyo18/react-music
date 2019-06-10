@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import BetterScroll from 'better-scroll'
-import {addClass} from "../../utils/dom"
 import './index.scss'
 
 class Slider extends Component {
@@ -36,7 +35,7 @@ class Slider extends Component {
     let sliderWidth = this.refs.slider.clientWidth
     for (let i = 0; i < this.sliderLength; i++) {
       let child = this.children[i]
-      addClass(child, 'slider-item')
+      child.classList.add('slider-item')
       child.style.width = sliderWidth + 'px'
       width += sliderWidth
     }
@@ -97,20 +96,20 @@ class Slider extends Component {
 
   render() {
     return (
-        <div className="slider" ref="slider">
-          <div className="slider-group" ref="sliderGroup">
-            {
-              this.props.children
-            }
-          </div>
-          <div className="dots">
-            {
-              this.state.dots.map((dot, index) => (
-                  <span key={index} className={`dot ${this.state.currentPageIndex === index ? 'active' : ''}`} />
-              ))
-            }
-          </div>
+      <div className="slider" ref="slider">
+        <div className="slider-group" ref="sliderGroup">
+          {
+            this.props.children
+          }
         </div>
+        <div className="dots">
+          {
+            this.state.dots.map((dot, index) => (
+              <span key={index} className={`dot ${this.state.currentPageIndex === index ? 'active' : ''}`}/>
+            ))
+          }
+        </div>
+      </div>
     )
   }
 }

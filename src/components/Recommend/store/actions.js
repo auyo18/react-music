@@ -1,13 +1,12 @@
-import {recommendList, recommendSlider} from "../../../api/song"
+import {recommendList, recommendSlider} from "../../../api/recommend"
 import types from './types'
-import {fromJS} from 'immutable'
 
 export const getRecommendSlider = () => {
   return async dispatch => {
     let {data} = await recommendSlider()
     dispatch({
       type: types.SET_RECOMMEND_SLIDER,
-      slider: fromJS(data.slider)
+      slider: data.slider
     })
   }
 }

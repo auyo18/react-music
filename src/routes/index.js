@@ -27,14 +27,21 @@ const Search = Loadable({
   timeout: 10000
 })
 
+const NotFound = Loadable({
+  loader: () => import('../components/NotFound'),
+  loading: Loading,
+  timeout: 10000
+})
+
 const routes = (
-    <Switch>
-      <Route path='/recommend' component={Recommend} />
-      <Route path='/singer' component={Singer} />
-      <Route path='/rank' component={Rank} />
-      <Route path='/search' component={Search} />
-      <Redirect from='/' to='/recommend' />
-    </Switch>
+  <Switch>
+    <Route path="/recommend" exact component={Recommend} />
+    <Route path="/singer" component={Singer} />
+    <Route path="/rank" exact component={Rank} />
+    <Route path="/search" exact component={Search} />
+    <Redirect from="/" to="/recommend" exact />
+    <Route component={NotFound} />
+  </Switch>
 )
 
 export default routes

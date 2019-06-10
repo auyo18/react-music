@@ -2,46 +2,35 @@
 @import "../../assets/styles/mixin";
 
 .recommend {
-  overflow: hidden;
-  position: fixed;
-  width: 100%;
-  max-width: $max-width;
-  top: 103px;
-  bottom: 0;
+  .slider-wrapper {
+    margin-bottom: 14px;
+  }
 
-  .recommend-content {
-    height: 100%;
+  h2 {
+    font-size: $font-size-large;
+    border-left: 3px solid $color-theme;
+    margin: 10px 0;
+    padding-left: 20px;
+    line-height: 1;
+  }
 
-    .slider-wrapper {
-      margin-bottom: 14px;
-    }
+  .recommend-list {
+    overflow: hidden;
 
-    h2 {
-      font-size: $font-size-large;
-      border-left: 3px solid $color-theme;
-      margin: 10px 0;
-      padding-left: 20px;
-      line-height: 1;
-    }
+    .list-container {
+      @include flex($wrap: wrap);
+      margin-right: -8px;
 
-    .recommend-list {
-      overflow: hidden;
+      dl {
+        width: 50%;
+        padding: 0 8px 8px 0;
 
-      .list-container {
-        @include flex($wrap: wrap);
-        margin-right: -8px;
+        dt {
+          @include no-wrap();
+        }
 
-        dl {
-          width: 50%;
-          padding: 0 8px 8px 0;
-
-          dt {
-            @include no-wrap();
-          }
-
-          dt, dd {
-            padding: 0 5px;
-          }
+        dt, dd {
+          padding: 0 5px;
         }
       }
     }

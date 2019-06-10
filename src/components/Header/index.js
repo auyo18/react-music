@@ -1,16 +1,13 @@
-import React, {Component} from 'react'
+import React from 'react'
 import './index.scss'
 
-class Header extends Component {
-  render() {
-    return (
-      <header className="header">
-        <div className="logo"/>
-        <h1>聚力音乐</h1>
-        <i className="iconfont icongeren"/>
-      </header>
-    )
-  }
-}
+
+const Header = () => (
+  <header className="header">
+    <div className="logo"/>
+    <h1>聚力音乐</h1>
+    <i className="iconfont icongeren"/>
+  </header>
+)
 
 export default Header

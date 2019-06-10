@@ -6,10 +6,6 @@ class Scroll extends Component {
     setTimeout(() => {
       this.initScroll()
     }, 20)
-
-    window.addEventListener('scroll', () => {
-      console.log(123)
-    })
   }
 
   initScroll = () => {
@@ -18,6 +14,12 @@ class Scroll extends Component {
       probeType: this.props.probeType,
       click: this.props.click
     })
+
+    if (this.props.listenScroll) {
+      this.scroll.on('scroll', pos => {
+        this.props.scroll(pos)
+      })
+    }
   }
 
   enable = () => {
@@ -32,13 +34,38 @@ class Scroll extends Component {
     this.scroll && this.scroll.refresh()
   }
 
+  destroy = () => {
+    this.scroll && this.scroll.destroy()
+  }
+
+  scrollTo = params => {
+    if (this.scroll) {
+      setTimeout(() => {
+        this.scroll.scrollTo(...params)
+      }, 100)
+    }
+  }
+
+  scrollToElement = params => {
+    if (this.scroll) {
+      setTimeout(() => {
+        this.scroll.scrollToElement(...params)
+      }, 100)
+    }
+  }
+
+  componentWillUnmount() {
+    this.destroy()
+  }
+
   render() {
+    this.refresh()
     return (
-        <div className={this.props.className} ref="wrapper">
-          {
-            this.props.children
-          }
-        </div>
+      <div className={this.props.className} ref="wrapper">
+        {
+          this.props.children
+        }
+      </div>
     )
   }
 }
@@ -46,7 +73,8 @@ class Scroll extends Component {
 Scroll.defaultProps = {
   probeType: 1,
   click: true,
-  data: []
+  data: [],
+  listenScroll: false
 }
 
 export default Scroll

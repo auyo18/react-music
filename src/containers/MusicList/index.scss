@@ -1,0 +1,109 @@
+@import "../../assets/styles/mixin";
+
+.music-list {
+  position: relative;
+  height: 100%;
+
+  .header {
+    position: relative;
+    width: 100%;
+    color: $color-background;
+
+    .back {
+      position: absolute;
+      padding: 10px 16px;
+      z-index: 12;
+
+      .iconfont {
+        font-size: $font-size-large-xx;
+        line-height: 1;
+      }
+    }
+
+    .title {
+      position: absolute;
+      width: 80%;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      top: 10px;
+      text-align: center;
+      font-size: $font-size-large;
+      @include no-wrap();
+      z-index: 11;
+    }
+
+    .bg-image {
+      height: 274px;
+      position: relative;
+      background-color: $color-text-l;
+      background-position: top center;
+
+      .mask {
+        @include mask();
+      }
+
+      .play-wrapper {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+
+        .play {
+          display: inline-block;
+          background-color: $color-theme;
+          padding: 5px 30px;
+          border-radius: 50px;
+          font-size: 16px;
+
+          i, span {
+            color: $color-text;
+          }
+
+          span {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .bg-layer {
+    position: relative;
+    height: 100%;
+    background-color: #fff;
+  }
+
+  .list-wrapper {
+    top: 274px;
+    padding: 0 16px;
+
+    .song-list {
+      .song-list-item {
+        padding: 10px 0;
+
+        dt {
+          font-size: $font-size-medium-x;
+        }
+
+        dd {
+          font-size: $font-size-small;
+          opacity: .9;
+
+          i.iconfont {
+            font-size: $font-size-small;
+            background-color: $color-text;
+            color: $color-theme;
+            border-radius: 5px;
+            padding: 2px;
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    position: absolute;
+  }
+}

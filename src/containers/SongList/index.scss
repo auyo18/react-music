@@ -1,0 +1,30 @@
+@import "../../assets/styles/mixin";
+
+.song-list {
+  padding: 0 16px;
+  background-color: $color-background;
+
+  .song-list-item {
+    padding: 10px 0;
+
+    dt {
+      font-size: $font-size-medium-x;
+      @include no-wrap();
+    }
+
+    dd {
+      font-size: $font-size-small;
+      opacity: .9;
+      @include no-wrap();
+
+      i.iconfont {
+        font-size: $font-size-small;
+        background-color: $color-text;
+        color: $color-theme;
+        border-radius: 5px;
+        padding: 2px;
+        margin-right: 5px;
+      }
+    }
+  }
+}

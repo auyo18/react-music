@@ -19,16 +19,12 @@ class ListView extends Component {
     this.timer = null
   }
 
-  componentWillMount() {
-    setTimeout(() => {
-      this.calculateHeight()
-    }, 20)
+  componentDidMount() {
+    this.calculateHeight()
   }
 
-  componentWillUpdate(nextProps, nextState, nextContext) {
-    setTimeout(() => {
-      this.calculateHeight()
-    }, 20)
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.calculateHeight()
   }
 
   componentWillUnmount() {
@@ -161,6 +157,7 @@ class ListView extends Component {
         ref="singerList"
         listenScroll={this.listenScroll}
         probeType={this.probeType}
+        data={this.props.singerList}
         scroll={pos => {
           this.scroll(pos)
         }}>
@@ -177,7 +174,7 @@ class ListView extends Component {
                       this.selectItem(item)
                     }}>
                       <dt>
-                        <img src={item.avatar} alt="" />
+                        <img src={item.avatar} alt=""/>
                       </dt>
                       <dd>{item.name}</dd>
                     </dl>

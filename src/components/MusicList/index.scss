@@ -5,7 +5,7 @@
   height: 100%;
 
   .header {
-    position: relative;
+    position: absolute;
     width: 100%;
     color: $color-background;
 
@@ -34,16 +34,19 @@
     }
 
     .bg-image {
-      height: 274px;
+      height: 300px;
       position: relative;
       background-color: $color-text-l;
-      background-position: top center;
+      background-position: center;
+      background-size: 100% auto;
+      transform-origin: top;
 
       .mask {
-        @include mask();
+        @include mask($bgCol: $color-text);
+        opacity: .2;
       }
 
-      .play-wrapper {
+      .play-btn-wrapper {
         position: absolute;
         bottom: 20px;
         width: 100%;
@@ -75,31 +78,10 @@
   }
 
   .list-wrapper {
-    top: 274px;
-    padding: 0 16px;
+    top: 300px;
 
-    .song-list {
-      .song-list-item {
-        padding: 10px 0;
-
-        dt {
-          font-size: $font-size-medium-x;
-        }
-
-        dd {
-          font-size: $font-size-small;
-          opacity: .9;
-
-          i.iconfont {
-            font-size: $font-size-small;
-            background-color: $color-text;
-            color: $color-theme;
-            border-radius: 5px;
-            padding: 2px;
-            margin-right: 5px;
-          }
-        }
-      }
+    .scroll-content {
+      overflow: visible;
     }
   }
 

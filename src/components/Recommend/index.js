@@ -14,7 +14,7 @@ class Recommend extends PureComponent {
   render() {
     return (
       <div className="recommend scroll-view">
-        <Scroll className="scroll-content" data={this.props.recommendSlider}>
+        <Scroll className="scroll-content" data={this.props.recommendList}>
           <div>
             <div className="slider-wrapper">
               {

@@ -8,6 +8,14 @@ class Scroll extends Component {
     }, 20)
   }
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (nextProps.data !== this.props.data) {
+      setTimeout(() => {
+        this.refresh()
+      }, 20)
+    }
+  }
+
   initScroll = () => {
     if (!this.refs.wrapper) return
     this.scroll = new BetterScroll(this.refs.wrapper, {
@@ -59,7 +67,6 @@ class Scroll extends Component {
   }
 
   render() {
-    this.refresh()
     return (
       <div className={this.props.className} ref="wrapper">
         {

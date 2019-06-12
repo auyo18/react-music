@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react'
 import './index.scss'
 import {CSSTransition} from "react-transition-group"
 import {singerMusicList} from "../../api/singer"
-import MusicList from '../../containers/MusicList'
+import MusicList from '../../components/MusicList'
 import {CreateSong} from "../../utils/singer"
 
 class SingerDetail extends PureComponent {
@@ -66,7 +66,6 @@ class SingerDetail extends PureComponent {
     return (
       <CSSTransition
         in={this.state.show}
-        key={this.props.match.params.id}
         timeout={300}
         className="slide singer-details"
       >

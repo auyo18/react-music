@@ -27,14 +27,19 @@ export default (state = defaultState, actions) => {
     case types.SET_CURRENT_INDEX:
       newState.currentIndex = actions.index
       return newState
-    case types.SET_PLAYLIST:
-      newState.playList = actions.list
+    case types.SET_PLAY_LIST:
+      console.log(actions.playList)
+      newState.playList = actions.playList
       return newState
     case types.SET_PLAY_MODE:
       newState.mode = actions.mode
       return newState
     case types.SET_FULL_SCREEN:
       newState.fullScreen = actions.fullScreen
+      return newState
+    case types.SET_SEQUENCE_LIST:
+      console.log(actions.sequenceList)
+      newState.sequenceList = actions.sequenceList
       return newState
     default:
       return state

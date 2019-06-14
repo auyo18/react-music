@@ -6,13 +6,15 @@ import {CSSTransition, TransitionGroup} from 'react-transition-group'
 import {playMode} from "../../config"
 import {shuffle, addZero} from "../../utils"
 import Toast from '../../containers/Toast'
+import PlayList from '../PlayList'
 import defaultImage from '../../assets/images/default.png'
 
 class Player extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      currentTime: 0
+      currentTime: 0,
+      playListShow: false
     }
     this.touch = {}
     this.progress = {}
@@ -42,6 +44,14 @@ class Player extends PureComponent {
         this.refs.audio.play()
       }
     }
+  }
+
+  play = () => {
+    this.props.setPlayingState(true)
+  }
+
+  pause = () => {
+    this.props.setPlayingState(false)
   }
 
   end = () => {
@@ -88,8 +98,8 @@ class Player extends PureComponent {
   }
 
   percent = () => {
-    const percent = this.state.currentTime / this.props.currentSong.interval
-    const progressWidth = this.progress.BarWidth * percent
+    this.progress.percent = this.state.currentTime / this.props.currentSong.interval
+    const progressWidth = this.progress.BarWidth * this.progress.percent
     this.setProgress(progressWidth)
   }
 
@@ -120,12 +130,25 @@ class Player extends PureComponent {
     }
   }
 
+  showPlayList = () => {
+    this.setState({playListShow: true})
+  }
+
+  hidePlayList = () => {
+    this.setState({playListShow: false})
+  }
+
+  error = () => {
+    console.log(123)
+    this.pause()
+  }
+
   render() {
     const {playList, sequenceList, currentSong, playing, mode, fullScreen, setPlayingState, changeMode, setFullScreen} = this.props
     return (
       <Fragment>
         {
-          <div className="player" style={!playList.length ? {visibility: 'hidden'} : {}}>
+          <div className="player" style={playList.length ? {} : {visibility: 'hidden'}}>
             <div className={`normal-player ${fullScreen ? 'show' : 'hide'}`}>
               <div className="background">
                 <img src={currentSong.image} alt=""/>
@@ -159,7 +182,7 @@ class Player extends PureComponent {
                     </CSSTransition>
                   </TransitionGroup>
                   <div className="playing-lyric-wrapper">
-                    <div className="play-lyric"></div>
+                    <div className="play-lyric"/>
                   </div>
                 </div>
               </div>
@@ -203,7 +226,8 @@ class Player extends PureComponent {
                   <div className="icon center">
                     <i
                       className={`iconfont play ${playing ? 'iconplus-pause' : 'iconbofang1'}`}
-                      onClick={() => {
+                      onClick={e => {
+                        e.stopPropagation()
                         setPlayingState(!playing)
                       }}
                     />
@@ -223,12 +247,50 @@ class Player extends PureComponent {
                 setFullScreen(true)
               }}
             >
-              miniPlayer
+              <div className={`cd ${playing ? 'play' : 'pause'}`}>
+                <img src={currentSong.image || defaultImage} alt=""/>
+              </div>
+              <div className="text">
+                <h2 className="name">{currentSong.name} - {currentSong.singer}</h2>
+              </div>
+              <div className="control" onClick={e => {
+                e.stopPropagation()
+                setPlayingState(!playing)
+              }}>
+                <div className="progress-circle">
+                  <svg viewBox="0 0 100 100">
+                    <circle
+                      strokeDasharray={Math.PI * 100}
+                      strokeDashoffset={(1 - (this.progress.percent || 0)) * Math.PI * 100}
+                      r="50"
+                      cx="50"
+                      cy="50"
+                      strokeWidth="2"
+                      fill="transparent"
+                      className="progress-bar"
+                    />
+                  </svg>
+                  <i
+                    className={`iconfont play ${playing ? 'iconplus-pause' : 'iconbofang1'}`}
+                  />
+                </div>
+              </div>
+              <div className="control" onClick={e => {
+                e.stopPropagation()
+                this.showPlayList()
+              }}>
+                <i className="iconfont list iconliebiao"/>
+              </div>
             </div>
+            <PlayList
+              show={this.state.playListShow}
+              hidePlayList={this.hidePlayList}
+              changeMode={this.props.changeMode}/>
             <audio
               ref="audio"
               src={currentSong.url}
               onTimeUpdate={this.timeUpdate}
+              onError={this.error}
               onEnded={this.end}/>
             <Toast title={playMode[mode].title}/>
           </div>

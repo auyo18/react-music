@@ -19,14 +19,15 @@
         border-bottom: 1px solid $color-background-b;
 
         dt {
-          width: 50px;
-          height: 50px;
+          width: 60px;
+          height: 60px;
           border-radius: 50px;
           overflow: hidden;
         }
 
         dd {
           margin-left: 20px;
+          font-size: $font-size-medium-x;
           @include no-wrap();
         }
       }

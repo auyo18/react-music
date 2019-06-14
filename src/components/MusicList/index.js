@@ -35,7 +35,7 @@ class MusicList extends PureComponent {
     } else if (y > -HEADER_HEIGHT) {
       this.refs.bgImage.style.transform = 'scale(1)'
       this.refs.playBtnWrapper.style.transform = 'scale(1)'
-      this.refs.mask.style.opacity = `${Math.min(scale + 0.2, 1)}`
+      this.refs.mask.style.opacity = `${Math.min(scale * .8 + 0.2, .9)}`
     }
   }
 

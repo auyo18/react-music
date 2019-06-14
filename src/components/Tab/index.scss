@@ -5,6 +5,7 @@
   @include flex();
   justify-content: space-around;
   font-size: $font-size-large + 2;
+  position: relative;
 
   .tab {
     background-color: $color-theme;

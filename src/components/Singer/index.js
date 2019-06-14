@@ -29,7 +29,7 @@ class Singer extends PureComponent {
           selectItem={this.selectSinger}
           singerList={this.props.singerList}
           shortCutList={this.props.shortCutList}/>
-        <Route path={`${this.props.match.url}/:id`} exact component={SingerDetail}/>
+        <Route path='/singer/:id' exact component={SingerDetail}/>
       </div>
     )
   }

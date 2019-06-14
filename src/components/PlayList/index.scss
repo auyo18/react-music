@@ -1,0 +1,130 @@
+@import "../../assets/styles/mixin";
+
+.playlist {
+  &:before {
+    content: '';
+    @include mask($position: fixed);
+    opacity: 1;
+    transition: all .3s;
+  }
+
+  &.hide {
+    &:before {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .list-wrapper {
+      transform: translateY(100%);
+    }
+  }
+
+  &.show {
+    .list-wrapper {
+      transform: translateY(0);
+    }
+  }
+
+  .list-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: $color-background;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    transition: transform .3s;
+    z-index: 99;
+
+
+    .list-header {
+      @include flex();
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      border-bottom: 1px solid $color-background-q;
+
+      i.iconfont, .name {
+        font-weight: bold;
+      }
+
+      .name {
+        flex: 1;
+        margin: 0 10px;
+        font-size: 16px;
+
+        span {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .playlist-content-container {
+      max-height: 300px;
+      padding: 15px;
+      font-size: 16px;
+      overflow: hidden;
+
+      .item {
+        @include flex();
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid $color-background-b;
+
+        .text {
+          flex: 1;
+          max-width: 70%;
+          color: $color-text-l;
+          @include no-wrap();
+          font-size: $font-size-small;
+
+          span {
+            color: $color-text;
+            font-size: $font-size-medium;
+            font-weight: bold;
+          }
+        }
+
+        &.cur {
+          .text {
+            color: $color-theme;
+
+            span {
+              color: $color-theme;
+            }
+          }
+        }
+
+        i.iconfont {
+          padding: 0 8px;
+        }
+
+        i.play {
+          width: 20px;
+          margin-right: 50px;
+          color: $color-theme;
+          padding: 0;
+        }
+      }
+    }
+
+    .add-song-btn {
+      text-align: center;
+      padding: 10px 0;
+
+      span {
+        background-color: $color-text;
+        padding: 5px 10px;
+        color: $color-theme;
+        border-radius: 19px;
+      }
+    }
+
+    .hide-btn {
+      text-align: center;
+      font-size: $font-size-medium-x;
+      border-top: 1px solid $color-background-b;
+      padding: 15px;
+    }
+  }
+}

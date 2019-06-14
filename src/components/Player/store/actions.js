@@ -22,9 +22,14 @@ export const setPlayMode = mode => ({
   mode
 })
 
-export const setPlayList = list => ({
-  type: types.SET_PLAYLIST,
-  list
+export const setPlayList = playList => ({
+  type: types.SET_PLAY_LIST,
+  playList
+})
+
+export const setSequenceList = sequenceList => ({
+  type: types.SET_SEQUENCE_LIST,
+  sequenceList
 })
 
 export const setFullScreen = fullScreen => ({

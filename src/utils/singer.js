@@ -14,7 +14,7 @@ export class Song {
     this.album = album
     this.singer = handleSinger(singer)
     this.interval = interval
-    this.image = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albummid}.jpg?max_age=2592000`
+    this.image = albummid.trim() ? `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albummid}.jpg?max_age=2592000` : ''
     this.url = `http://dl.stream.qqmusic.qq.com/C400${mid}.m4a?guid=2355532888&vkey=${getVKey(vkey)}&uin=0&fromtag=38`
   }
 }
@@ -29,7 +29,7 @@ const handleSinger = singer => {
 
 const getVKey = vkey => {
   if (!vkey) {
-    return '701831C1DBDFEC0CCD9850CF0F6A4F1AA5DDFA2C3899876A1C3DADABF535222F6A9090504EF453F5194103D74A3B5AC2257DCBFF45520FF9'
+    return '1CB19A24BC53F2ED609211DDDF665BC6FA2AC3AEF2EB3D34C430F36FF1C4902EAE70B3B4226A8BDF71C50699FD07614DC985C4C0BF244D00'
   }
   return vkey[Math.round(Math.random() * vkey.length)]
 }

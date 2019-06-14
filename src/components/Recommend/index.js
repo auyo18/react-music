@@ -1,9 +1,18 @@
 import React, {PureComponent} from 'react'
 import {connect} from "react-redux"
+import {Route} from 'react-router-dom'
 import Slider from '../../containers/Slider'
 import Scroll from '../../containers/Scroll'
 import {getRecommendList, getRecommendSlider} from "./store/actions"
 import './index.scss'
+import Loadable from "react-loadable"
+import Loading from "../../containers/Loading"
+
+const Disc = Loadable({
+  loader: () => import('../Disc'),
+  loading: Loading,
+  timeout: 10000
+})
 
 class Recommend extends PureComponent {
   componentWillMount() {
@@ -24,7 +33,7 @@ class Recommend extends PureComponent {
                   {
                     this.props.recommendSlider.map(slider => (
                       <div key={slider.id}>
-                        <img src={slider.picUrl} alt="" />
+                        <img src={slider.picUrl} alt=""/>
                       </div>
                     ))
                   }
@@ -38,8 +47,10 @@ class Recommend extends PureComponent {
               <div className="list-container">
                 {
                   this.props.recommendList.map(item => (
-                    <dl key={item.dissid}>
-                      <img src={item.imgurl} alt="" />
+                    <dl key={item.dissid} onClick={() => {
+                      this.props.history.push({pathname: `/recommend/${item.dissid}`, state: {item}})
+                    }}>
+                      <img src={item.imgurl} alt=""/>
                       <dt>{item.dissname}</dt>
                       <dd>{item.creator.name}</dd>
                     </dl>
@@ -49,6 +60,7 @@ class Recommend extends PureComponent {
             </div>
           </div>
         </Scroll>
+        <Route path={'/recommend/:id'} exact component={Disc}/>
       </div>
     )
   }

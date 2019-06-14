@@ -7,10 +7,12 @@
     text-align: center;
     max-width: $max-width;
     margin: 0 auto;
-    transition: transform .3s;
+    transition: all .3s;
+    z-index: 102;
 
     &.hide {
       transform: translateY(100%);
+      visibility: hidden;
     }
 
     &.show {
@@ -196,18 +198,82 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 60px;
+    height: 40px;
     background-color: $color-background;
-    border-top: 1px solid $color-background-q;
+    box-shadow: 0 -4px 8px rgba($color-text, .07);
     z-index: 99;
-    transition: transform .3s;
+    transition: all .3s;
 
     &.hide {
       transform: translateY(100%);
+      visibility: hidden;
     }
 
     &.show {
       transform: translateY(0);
+    }
+
+    .cd {
+      position: relative;
+      top: -5px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin: 0 10px 0 5px;
+      overflow: hidden;
+      flex: 0 0 40px;
+      animation: rotate 20s linear infinite;
+
+      &.play {
+        animation-play-state: running;
+      }
+
+      &.pause {
+        animation-play-state: paused;
+      }
+    }
+
+    .text {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .control {
+      text-align: center;
+      flex: 0 0 30px;
+      padding: 0 10px;
+      position: relative;
+
+      .progress-circle {
+        position: relative;
+
+        svg {
+          width: $font-size-large-xx;
+          height: $font-size-large-xx;
+        }
+
+        circle {
+          stroke-width: 10px;
+          transform-origin: center;
+
+          &.progress-bar {
+            transform: scale(.9) rotate(-90deg);
+            stroke: $color-text;
+          }
+        }
+      }
+
+      .iconfont {
+        line-height: 1;
+        font-size: $font-size-large-x;
+      }
+
+      .iconfont.play {
+        font-size: $font-size-large-xx;
+        position: absolute;
+        top: 1px;
+        left: 0;
+      }
     }
   }
 }

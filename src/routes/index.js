@@ -35,7 +35,7 @@ const NotFound = Loadable({
 
 const routes = (
   <Switch>
-    <Route path="/recommend" exact component={Recommend} />
+    <Route path="/recommend" component={Recommend} />
     <Route path="/singer" component={Singer} />
     <Route path="/rank" exact component={Rank} />
     <Route path="/search" exact component={Search} />

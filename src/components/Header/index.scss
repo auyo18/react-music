@@ -12,6 +12,7 @@ header.header {
   line-height: $height;
   color: $color-text;
   font-size: $font-size-large-x;
+  position: relative;
 
   .logo {
     background-image: url("../../assets/images/logo.png");

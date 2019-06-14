@@ -19,14 +19,3 @@ export const recommendSlider = () => (
     params: Object.assign({}, baseParams)
   })
 )
-
-export const discList = disstid => (
-  request({
-    url: '/cApi/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
-    method: 'get',
-    params: Object.assign({
-      disstid,
-      type: 1
-    }, baseParams)
-  })
-)

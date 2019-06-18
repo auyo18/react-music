@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import BetterScroll from 'better-scroll'
 
-class Scroll extends Component {
+class Scroll extends PureComponent {
   componentDidMount() {
     setTimeout(() => {
       this.initScroll()
@@ -26,6 +26,14 @@ class Scroll extends Component {
     if (this.props.listenScroll) {
       this.scroll.on('scroll', pos => {
         this.props.scroll(pos)
+      })
+    }
+
+    if (this.props.pullup) {
+      this.scroll.on('scrollEnd', () => {
+        if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+          this.props.scrollToEnd()
+        }
       })
     }
   }
@@ -68,7 +76,7 @@ class Scroll extends Component {
 
   render() {
     return (
-      <div className={this.props.className} ref="wrapper">
+      <div className={this.props.className} ref="wrapper" style={this.props.style}>
         {
           this.props.children
         }
@@ -81,7 +89,8 @@ Scroll.defaultProps = {
   probeType: 1,
   click: true,
   data: [],
-  listenScroll: false
+  listenScroll: false,
+  pullup: false
 }
 
 export default Scroll

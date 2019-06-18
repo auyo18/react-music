@@ -5,8 +5,6 @@
     @include mask($position: fixed, $bgCol: $color-text);
     color: $color-background;
     text-align: center;
-    max-width: $max-width;
-    margin: 0 auto;
     transition: all .3s;
     z-index: 102;
 
@@ -23,6 +21,9 @@
       @include mask();
       opacity: .6;
       filter: blur(40px);
+      background-size: cover;
+      background-position: center;
+      transition: background .5s;
 
       img {
         height: 100%;
@@ -67,6 +68,14 @@
     }
 
     .middle {
+      white-space: nowrap;
+      overflow: hidden;
+
+      &.scroll-view {
+        top: 80px;
+        bottom: 140px;
+      }
+
       .middle-l {
         position: relative;
         display: inline-block;
@@ -74,6 +83,7 @@
         width: 100%;
         height: 0;
         padding-top: 80%;
+        transition-duration: 300ms;
 
         .cd-wrapper {
           position: absolute;
@@ -113,6 +123,44 @@
             }
           }
         }
+
+        .playing-lyric-wrapper {
+          text-align: center;
+          color: $color-background;
+          font-size: $font-size-medium-x;
+          width: 80%;
+          margin: 10px auto 0;
+
+          .play-lyric {
+            @include no-wrap();
+          }
+        }
+      }
+
+      .middle-r {
+        display: inline-block;
+        vertical-align: top;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        transition-duration: 300ms;
+
+        .lyric-wrapper {
+          width: 80%;
+          margin: 0 auto;
+          overflow: hidden;
+          text-align: center;
+
+          .text {
+            color: $color-background-b;
+            font-size: 16px;
+            line-height: 2.5;
+
+            &.cur {
+              color: $color-theme;
+            }
+          }
+        }
       }
     }
 
@@ -120,6 +168,25 @@
       position: absolute;
       bottom: 20px;
       width: 100%;
+
+      .dot-wrapper {
+        text-align: center;
+      }
+
+      .dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 20px;
+        margin: 0 4px;
+        background-color: $color-background-q-o;
+        transition: width .3s;
+      }
+
+      .dot.active {
+        width: 20px;
+        background-color: $color-background;
+      }
 
       .progress-wrapper {
         @include flex();
@@ -178,6 +245,10 @@
           font-size: $font-size-large-xx;
           color: $color-background;
           padding: 16px;
+
+          &.like {
+            color: $color-theme;
+          }
         }
 
         .center {
@@ -197,8 +268,7 @@
     position: fixed;
     left: 0;
     bottom: 0;
-    width: 100%;
-    height: 40px;
+    height: 50px;
     background-color: $color-background;
     box-shadow: 0 -4px 8px rgba($color-text, .07);
     z-index: 99;
@@ -216,12 +286,12 @@
     .cd {
       position: relative;
       top: -5px;
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       margin: 0 10px 0 5px;
       overflow: hidden;
-      flex: 0 0 40px;
+      flex: 0 0 50px;
       animation: rotate 20s linear infinite;
 
       &.play {
@@ -236,12 +306,16 @@
     .text {
       flex: 1;
       overflow: hidden;
+
+      .name {
+        @include no-wrap();
+      }
     }
 
     .control {
       text-align: center;
       flex: 0 0 30px;
-      padding: 0 10px;
+      padding: 10px;
       position: relative;
 
       .progress-circle {

@@ -1,9 +1,9 @@
 import React, {PureComponent} from 'react'
-import './index.scss'
 import {CSSTransition} from "react-transition-group"
 import {singerMusicList} from "../../api/singer"
 import MusicList from '../../components/MusicList'
 import {CreateSong} from "../../utils/singer"
+import {connect} from "react-redux"
 
 class SingerDetail extends PureComponent {
   constructor(props) {
@@ -16,11 +16,11 @@ class SingerDetail extends PureComponent {
   }
 
   componentWillMount() {
-    if (this.props.location.state && this.props.location.state.item) {
-      let item = this.props.location.state.item
-      this.getMusicList(item.id)
+    if (this.props.location.state && this.props.location.state.singer) {
+      let {singer} = this.props.location.state
+      this.getMusicList(singer.id)
       this.setState(() => ({
-        singer: item
+        singer
       }))
     } else {
       this.props.history.push('/singer')
@@ -45,7 +45,7 @@ class SingerDetail extends PureComponent {
     list.forEach(item => {
       const musicData = item.musicData
       if (musicData) {
-        ret.push(CreateSong(musicData))
+        ret.push(CreateSong(musicData, this.props.vKey))
       }
     })
     return ret
@@ -56,7 +56,11 @@ class SingerDetail extends PureComponent {
       show: false
     }), () => {
       setTimeout(() => {
-        this.props.history.push('/singer')
+        if (this.props.location.state.entry === 'search') {
+          this.props.history.push('/search')
+        } else {
+          this.props.history.push('/singer')
+        }
       }, 300)
     })
   }
@@ -67,7 +71,7 @@ class SingerDetail extends PureComponent {
       <CSSTransition
         in={this.state.show}
         timeout={300}
-        className="slide singer-details"
+        className="slide music-list-wrapper fixed-container"
       >
         <div>
           <MusicList back={this.back} singer={this.state.singer} songList={this.state.songList}/>
@@ -77,4 +81,8 @@ class SingerDetail extends PureComponent {
   }
 }
 
-export default SingerDetail
+const mapStateToProps = state => ({
+  vKey: state.player.vKey
+})
+
+export default connect(mapStateToProps, null)(SingerDetail)

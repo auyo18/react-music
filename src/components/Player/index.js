@@ -1,49 +1,76 @@
 import React, {PureComponent, Fragment} from 'react'
 import './index.scss'
 import {connect} from "react-redux"
-import {setPlayingState, setCurrentIndex, setPlayList, setPlayMode, setFullScreen} from "./store/actions"
+import {
+  setPlayingState,
+  setCurrentIndex,
+  setPlayList,
+  setPlayMode,
+  setFullScreen,
+  setPlayHistory,
+  setFavoriteList
+} from "./store/actions"
 import {CSSTransition, TransitionGroup} from 'react-transition-group'
 import {playMode} from "../../config"
 import {shuffle, addZero} from "../../utils"
 import Toast from '../../containers/Toast'
 import PlayList from '../PlayList'
 import defaultImage from '../../assets/images/default.png'
+import {getLyric} from "../../api/song"
+import {Base64} from 'js-base64'
+import Lyric from 'lyric-parser'
+import Scroll from '../../containers/Scroll'
+import ProgressBar from '../../containers/ProgressBar'
+
+const PLAY_HISTORY_MAX_LENGTH = 200
 
 class Player extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
       currentTime: 0,
-      playListShow: false
+      percent: 0,
+      playListShow: false,
+      lyric: null,
+      lyricLineNum: 0,
+      lyricTxt: '',
+      currentShow: 'cd'
     }
     this.touch = {}
     this.progress = {}
-  }
-
-  componentDidMount() {
-    this.progress.BtnWidth = this.refs.progressBtn.clientWidth
-    this.progress.BarWidth = this.refs.progressBar.clientWidth - this.progress.BtnWidth
+    this.progressBarMove = false
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {currentSong} = this.props
-    this.watchPlaying(currentSong, this.props.playing)
+    if (prevProps.playing !== this.props.playing) {
+      this.watchPlaying(currentSong, this.props.playing)
+    }
+    if (!this.props.playList.length) {
+      this.setState(() => ({
+        playListShow: false
+      }))
+    }
     this.watchCurrentSong(prevProps.currentSong, currentSong)
   }
 
   watchPlaying = (currentSong, playing) => {
     const {audio} = this.refs
-    if (currentSong.url) {
-      playing ? audio.play() : audio.pause()
+    playing ? audio.play() : audio.pause()
+    if (this.state.lyric) {
+      this.state.lyric.togglePlay()
     }
   }
 
   watchCurrentSong = (oldSong, newSong) => {
-    if (oldSong.mid !== newSong.mid) {
-      if (newSong.url) {
-        this.refs.audio.play()
-      }
+    if (oldSong.id === newSong.id || !newSong.url) return
+    if (this.state.lyric) {
+      this.state.lyric.stop()
     }
+    this.refs.audio.play()
+    this.play()
+    this.props.setPlayHistory(newSong, this.props.playHistory)
+    this.getLyric(newSong.id)
   }
 
   play = () => {
@@ -66,28 +93,43 @@ class Player extends PureComponent {
   loopPlay = () => {
     this.refs.audio.currentTime = 0
     this.refs.audio.play()
+    if (this.state.lyric) {
+      this.state.lyric.seek(0)
+    }
   }
 
   prevSong = () => {
-    this.props.prevSong(this.props.currentIndex, this.props.playList.length, this.props.playing)
+    if (this.props.playList.length === 1) {
+      this.loopPlay()
+    } else {
+      this.props.prevSong(this.props.currentIndex, this.props.playList.length, this.props.playing)
+    }
   }
 
   nextSong = () => {
-    this.props.nextSong(this.props.currentIndex, this.props.playList.length, this.props.playing)
+    if (this.props.playList.length === 1) {
+      this.loopPlay()
+    } else {
+      this.props.nextSong(this.props.currentIndex, this.props.playList.length, this.props.playing)
+    }
   }
 
   timeUpdate = e => {
-    if (this.touch.initiated) return
+    if (this.progressBarMove) return
     e.persist()
+    const currentTime = e.target.currentTime
+    const percent = currentTime / this.props.currentSong.interval
     this.setState(() => ({
-      currentTime: e.target.currentTime
-    }), () => {
-      this.percent()
-    })
+      currentTime,
+      percent
+    }))
   }
 
   updateSongTime = time => {
     this.refs.audio.currentTime = time
+    if (this.state.lyric) {
+      this.state.lyric.seek(time * 1000)
+    }
   }
 
   format = (interval) => {
@@ -95,39 +137,6 @@ class Player extends PureComponent {
     const minute = interval / 60 | 0
     const second = addZero(interval % 60)
     return `${minute}:${second}`
-  }
-
-  percent = () => {
-    this.progress.percent = this.state.currentTime / this.props.currentSong.interval
-    const progressWidth = this.progress.BarWidth * this.progress.percent
-    this.setProgress(progressWidth)
-  }
-
-  setProgress = progressWidth => {
-    this.refs.progress.style.width = progressWidth + 'px'
-    this.refs.progressBtnWP.style.left = progressWidth + 'px'
-  }
-
-  progressTouchStart = e => {
-    this.touch.initiated = true
-    this.touch.startX = e.touches[0].pageX
-    this.touch.progressWidth = this.refs.progress.clientWidth
-  }
-
-  progressTouchMove = e => {
-    if (!this.touch.initiated) return
-    const delta = e.touches[0].pageX - this.touch.startX
-    const newWidth = Math.min(this.progress.BarWidth, Math.max(0, this.touch.progressWidth + delta))
-    this.setProgress(newWidth)
-  }
-
-  progressTouchEnd = () => {
-    this.touch.initiated = false
-    const time = this.refs.progress.clientWidth / this.progress.BarWidth * this.props.currentSong.interval
-    this.updateSongTime(time)
-    if (!this.props.playing) {
-      this.props.setPlayingState(true)
-    }
   }
 
   showPlayList = () => {
@@ -139,8 +148,107 @@ class Player extends PureComponent {
   }
 
   error = () => {
-    console.log(123)
     this.pause()
+  }
+
+  getLyric = async id => {
+    let data = await getLyric(id)
+    this.setState(() => ({
+      lyric: new Lyric(Base64.decode(data.lyric), this.handleLyric)
+    }))
+    if (this.props.playing) {
+      this.state.lyric.play()
+    }
+  }
+
+  handleLyric = ({lineNum, txt}) => {
+    this.setState(() => ({
+      lyricLineNum: lineNum,
+      lyricTxt: txt
+    }))
+    if (lineNum > 5) {
+      let lineEl = this.refs.lyricWrapper.children[lineNum - 5]
+      this.refs.lyric.scrollToElement([lineEl, 1e3])
+    } else {
+      this.refs.lyric.scrollTo([0, 0, 1e3])
+    }
+  }
+
+  middleTouchStart = e => {
+    this.touch.initiated = true
+    this.touch.percent = 0
+    const touch = e.touches[0]
+    this.touch.startX = touch.pageX
+    this.touch.startY = touch.pageY
+  }
+  middleTouchMove = e => {
+    if (!this.touch.initiated) return
+    const touch = e.touches[0]
+    const deltaX = touch.pageX - this.touch.startX
+    const deltaY = touch.pageY - this.touch.startY
+    if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      this.touch.percent = null
+      this.touch.initiated = false
+      return
+    }
+
+    const width = this.refs.middle.clientWidth
+    const left = this.state.currentShow === 'cd' ? 0 : -width
+    const offsetWidth = Math.min(0, Math.max(-width, left + deltaX))
+    this.touch.percent = Math.abs(offsetWidth / width)
+    this.refs.lyric.refs.wrapper.style.transform = `translateX(${offsetWidth}px)`
+    this.refs.cd.style.opacity = 1 - this.touch.percent
+  }
+  middleTouchEnd = () => {
+    if (!this.touch.initiated || !this.touch.percent) return
+    this.touch.initiated = false
+    let offsetWidth
+    let opacity
+    if (this.state.currentShow === 'cd') {
+      if (this.touch.percent > .1) {
+        offsetWidth = -this.refs.middle.clientWidth
+        this.setState(() => ({
+          currentShow: 'lyric'
+        }))
+        opacity = 0
+      } else {
+        offsetWidth = 0
+        opacity = 1
+      }
+    } else {
+      if (this.touch.percent < .9) {
+        offsetWidth = 0
+        this.setState(() => ({
+          currentShow: 'cd'
+        }))
+        opacity = 1
+      } else {
+        offsetWidth = -this.refs.middle.clientWidth
+        opacity = 0
+      }
+    }
+    this.refs.lyric.refs.wrapper.style.transform = `translateX(${offsetWidth}px)`
+    this.refs.cd.style.opacity = opacity
+  }
+
+  changeProgressBarMoveState = state => {
+    this.progressBarMove = state
+  }
+
+  isFavorite = () => {
+    return this.props.favoriteList.findIndex(item => item.id === this.props.currentSong.id)
+  }
+
+  toggleFavorite = () => {
+    let favoriteList = this.props.favoriteList.slice()
+    const index = this.isFavorite()
+    if (index > -1) {
+      favoriteList.splice(index, 1)
+    } else {
+      favoriteList.push(this.props.currentSong)
+    }
+
+    this.props.setFavoriteList(favoriteList)
   }
 
   render() {
@@ -149,9 +257,9 @@ class Player extends PureComponent {
       <Fragment>
         {
           <div className="player" style={playList.length ? {} : {visibility: 'hidden'}}>
-            <div className={`normal-player ${fullScreen ? 'show' : 'hide'}`}>
-              <div className="background">
-                <img src={currentSong.image} alt=""/>
+            <div className={`normal-player fixed-container ${fullScreen ? 'show' : 'hide'}`}>
+              <div className="background"
+                   style={currentSong.image ? {backgroundImage: `url(${currentSong.image})`} : {}}>
               </div>
               <div className="top">
                 <div className="back" onClick={() => {
@@ -166,8 +274,13 @@ class Player extends PureComponent {
                   {currentSong.singer}
                 </h3>
               </div>
-              <div className="middle">
-                <div className="middle-l">
+              <div
+                className="middle scroll-view"
+                ref="middle"
+                onTouchStart={this.middleTouchStart}
+                onTouchMove={this.middleTouchMove}
+                onTouchEnd={this.middleTouchEnd}>
+                <div className="middle-l" ref="cd">
                   <TransitionGroup>
                     <CSSTransition
                       key={currentSong.id}
@@ -182,33 +295,39 @@ class Player extends PureComponent {
                     </CSSTransition>
                   </TransitionGroup>
                   <div className="playing-lyric-wrapper">
-                    <div className="play-lyric"/>
+                    <p className="play-lyric">
+                      {this.state.lyricTxt}
+                    </p>
                   </div>
                 </div>
+                <Scroll ref="lyric" className="middle-r" data={this.state.lyric && this.state.lyric.lines}>
+                  <div className="lyric-wrapper" ref="lyricWrapper">
+                    {
+                      this.state.lyric && this.state.lyric.lines && this.state.lyric.lines.map((line, index) => (
+                        <p className={`text ${this.state.lyricLineNum === index ? 'cur' : ''}`}
+                           key={line.time}>{line.txt}</p>
+                      ))
+                    }
+                  </div>
+                </Scroll>
               </div>
               <div className="bottom">
                 <div className="dot-wrapper">
-
+                  <i className={`dot ${this.state.currentShow === 'cd' ? 'active' : ''}`}/>
+                  <i className={`dot ${this.state.currentShow !== 'cd' ? 'active' : ''}`}/>
                 </div>
                 <div className="progress-wrapper">
                   <span className="time time-l">
                     {this.format(this.state.currentTime)}
                   </span>
                   <div className="progress-bar-wrapper">
-                    <div className="progress-bar" ref="progressBar">
-                      <div className="bar-inner">
-                        <div className="progress" ref="progress"/>
-                        <div
-                          className="progress-btn-wrapper"
-                          ref="progressBtnWP"
-                          onTouchStart={this.progressTouchStart}
-                          onTouchMove={this.progressTouchMove}
-                          onTouchEnd={this.progressTouchEnd}
-                        >
-                          <div className="progress-btn" ref="progressBtn"/>
-                        </div>
-                      </div>
-                    </div>
+                    <ProgressBar
+                      percent={this.state.percent}
+                      interval={this.props.currentSong.interval}
+                      updateSongTime={this.updateSongTime}
+                      setPlayingState={this.props.setPlayingState}
+                      changeProgressBarMoveState={this.changeProgressBarMoveState}
+                    />
                   </div>
                   <span className="time time-r">
                     {this.format(currentSong.interval)}
@@ -236,13 +355,17 @@ class Player extends PureComponent {
                     <i className="iconfont mode iconqianjin" onClick={this.nextSong}/>
                   </div>
                   <div className="icon right">
-                    <i className="iconfont mode iconxihuan1"/>
+                    <i className={`iconfont ${this.isFavorite() > -1 ? 'like iconxihuan' : 'iconxihuan1'}`}
+                       onClick={e => {
+                         e.stopPropagation()
+                         this.toggleFavorite()
+                       }}/>
                   </div>
                 </div>
               </div>
             </div>
             <div
-              className={`mini-player ${fullScreen ? 'hide' : 'show'}`}
+              className={`mini-player fixed-container ${fullScreen ? 'hide' : 'show'}`}
               onClick={() => {
                 setFullScreen(true)
               }}
@@ -261,7 +384,7 @@ class Player extends PureComponent {
                   <svg viewBox="0 0 100 100">
                     <circle
                       strokeDasharray={Math.PI * 100}
-                      strokeDashoffset={(1 - (this.progress.percent || 0)) * Math.PI * 100}
+                      strokeDashoffset={(1 - (this.state.percent || 0)) * Math.PI * 100}
                       r="50"
                       cx="50"
                       cy="50"
@@ -308,7 +431,9 @@ const mapStateToProps = state => ({
   sequenceList: state.player.sequenceList,
   mode: state.player.mode,
   currentIndex: state.player.currentIndex,
-  currentSong: state.player.playList[state.player.currentIndex] || {}
+  currentSong: state.player.playList[state.player.currentIndex] || {},
+  playHistory: state.player.playHistory,
+  favoriteList: state.player.favoriteList
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -340,6 +465,22 @@ const mapDispatchToProps = dispatch => ({
   },
   setFullScreen(fullScreen) {
     dispatch(setFullScreen(fullScreen))
+  },
+  setPlayHistory(song, history) {
+    const playHistory = history.slice()
+    const index = playHistory.findIndex(item => item.id === song.id)
+    if (index === 0) return
+    if (index > 0) {
+      playHistory.splice(index, 1)
+    }
+    playHistory.unshift(song)
+    if (playHistory.length > PLAY_HISTORY_MAX_LENGTH) {
+      playHistory.pop()
+    }
+    dispatch(setPlayHistory(playHistory))
+  },
+  setFavoriteList(favoriteList) {
+    dispatch(setFavoriteList(favoriteList))
   }
 })
 

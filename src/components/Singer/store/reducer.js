@@ -5,15 +5,16 @@ const defaultState = {
   shortCutList: []
 }
 
-export default (state = defaultState, actions) => {
-  const newState = JSON.parse(JSON.stringify(state))
-  switch (actions.type) {
+export default (state = defaultState, action) => {
+  switch (action.type) {
     case types.SET_SINGER_LIST:
-      newState.list = actions.list
-      return newState
+      return Object.assign({}, state, {
+        list: action.list
+      })
     case types.SET_SHORT_CUT:
-      newState.shortCutList = actions.shortCut
-      return newState
+      return Object.assign({}, state, {
+        shortCutList: action.shortCut
+      })
     default:
       return state
   }

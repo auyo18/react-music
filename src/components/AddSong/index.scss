@@ -1,0 +1,63 @@
+@import "../../assets/styles/mixin";
+
+.add-song {
+  @include mask($position: fixed, $bgCol: $color-background);
+  transition: transform .3s, visibility .3s;
+  z-index: 101;
+
+  &.show {
+    transform: translateY(0);
+  }
+
+  &.hide {
+    visibility: hidden;
+    transform: translateY(100%);
+  }
+
+  .header {
+    height: 44px;
+    position: relative;
+
+    .title {
+      text-align: center;
+      font-size: $font-size-large;
+      line-height: 44px;
+    }
+
+    .close {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 8px 12px;
+    }
+  }
+
+  .search {
+    .suggest-wrapper {
+      top: 103px;
+    }
+  }
+
+  .shortcut {
+    .switches {
+      margin: 0 10px;
+    }
+
+    .shortcut-box {
+      top: 140px;
+
+      .scroll-content {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-color: $color-background;
+
+        .search-history-wrapper {
+          padding: 0 20px;
+        }
+      }
+    }
+  }
+}

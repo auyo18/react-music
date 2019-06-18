@@ -2,9 +2,6 @@
 
 .singer-details {
   @include mask($position: fixed, $bgCol: $color-background);
-  width: 100%;
-  max-width: $max-width;
-  margin: 0 auto;
   z-index: 101;
 }
 

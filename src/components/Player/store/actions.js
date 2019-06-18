@@ -36,3 +36,18 @@ export const setFullScreen = fullScreen => ({
   type: types.SET_FULL_SCREEN,
   fullScreen
 })
+
+export const setVKey = vKey => ({
+  type: types.SET_V_KEY,
+  vKey
+})
+
+export const setPlayHistory = playHistory => ({
+  type: types.SET_PLAY_HISTORY,
+  playHistory
+})
+
+export const setFavoriteList = favoriteList => ({
+  type: types.SET_FAVORITE_LIST,
+  favoriteList
+})

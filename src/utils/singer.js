@@ -7,15 +7,15 @@ export default class CreateSinger {
 }
 
 export class Song {
-  constructor({id, mid, name, album, albummid, singer, interval, vkey}) {
+  constructor({id, mid, name, album, albummid, singer, interval, vKey}) {
     this.id = id
     this.mid = mid
     this.name = name
     this.album = album
     this.singer = handleSinger(singer)
     this.interval = interval
-    this.image = albummid.trim() ? `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albummid}.jpg?max_age=2592000` : ''
-    this.url = `http://dl.stream.qqmusic.qq.com/C400${mid}.m4a?guid=2355532888&vkey=${getVKey(vkey)}&uin=0&fromtag=38`
+    this.image = albummid && albummid.trim() ? `//y.gtimg.cn/music/photo_new/T002R300x300M000${albummid}.jpg?max_age=2592000` : ''
+    this.url = `//dl.stream.qqmusic.qq.com/C400${mid}.m4a?guid=2355532888&vkey=${getVKey(vKey)}&uin=0&fromtag=38`
   }
 }
 
@@ -27,14 +27,14 @@ const handleSinger = singer => {
   return ret.join('/')
 }
 
-const getVKey = vkey => {
-  if (!vkey) {
-    return '1CB19A24BC53F2ED609211DDDF665BC6FA2AC3AEF2EB3D34C430F36FF1C4902EAE70B3B4226A8BDF71C50699FD07614DC985C4C0BF244D00'
+const getVKey = (vKey = []) => {
+  if (!vKey.length) {
+    return 'EAC99AF8D1286BD965FB261DAB7E38C9BA815F9B6EB56C8591E6157073EDE1BE9F6D5F725CAF39C829095E0652CC0FDF3FAD41CFCB1889A5'
   }
-  return vkey[Math.round(Math.random() * vkey.length)]
+  return vKey[Math.round(Math.random() * (vKey.length - 1))]
 }
 
-export const CreateSong = musicData => {
+export const CreateSong = (musicData, vKey) => {
   return new Song({
     id: musicData.songid,
     mid: musicData.songmid,
@@ -42,6 +42,7 @@ export const CreateSong = musicData => {
     album: musicData.albumname,
     albummid: musicData.albummid,
     singer: musicData.singer,
-    interval: musicData.interval
+    interval: musicData.interval,
+    vKey
   })
 }

@@ -20,9 +20,21 @@ class Recommend extends PureComponent {
     !this.props.recommendList.length && this.props.getRecommendList()
   }
 
+  componentDidMount() {
+    this.setBottom(this.props.playList)
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.setBottom(nextProps.playList)
+  }
+
+  setBottom = playList => {
+    this.refs.recommend.style.bottom = playList.length > 0 ? '50px' : ''
+  }
+
   render() {
     return (
-      <div className="recommend scroll-view">
+      <div className="recommend scroll-view fixed-container" ref="recommend">
         <Scroll className="scroll-content" data={this.props.recommendList}>
           <div>
             <div className="slider-wrapper">
@@ -33,7 +45,7 @@ class Recommend extends PureComponent {
                   {
                     this.props.recommendSlider.map(slider => (
                       <div key={slider.id}>
-                        <img src={slider.picUrl} alt=""/>
+                        <img src={slider.picUrl} alt="" />
                       </div>
                     ))
                   }
@@ -48,9 +60,9 @@ class Recommend extends PureComponent {
                 {
                   this.props.recommendList.map(item => (
                     <dl key={item.dissid} onClick={() => {
-                      this.props.history.push({pathname: `/recommend/${item.dissid}`, state: {item}})
+                      this.props.history.push({pathname: `/recommend/${item.dissid}`, state: {disc: item}})
                     }}>
-                      <img src={item.imgurl} alt=""/>
+                      <img src={item.imgurl} alt="" />
                       <dt>{item.dissname}</dt>
                       <dd>{item.creator.name}</dd>
                     </dl>
@@ -60,7 +72,7 @@ class Recommend extends PureComponent {
             </div>
           </div>
         </Scroll>
-        <Route path={'/recommend/:id'} exact component={Disc}/>
+        <Route path={'/recommend/:id'} exact component={Disc} />
       </div>
     )
   }
@@ -69,7 +81,8 @@ class Recommend extends PureComponent {
 const mapStateToProps = state => {
   return {
     recommendSlider: state.recommend.slider,
-    recommendList: state.recommend.list
+    recommendList: state.recommend.list,
+    playList: state.player.playList
   }
 }
 

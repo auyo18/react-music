@@ -18,18 +18,22 @@ class Singer extends PureComponent {
     !this.props.singerList.length && this.props.getSingerList()
   }
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.refs.singer.style.bottom = nextProps.playList.length > 0 ? '50px' : ''
+  }
+
   selectSinger = item => {
-    this.props.history.push({pathname: `/singer/${item.id}`, state: {item}})
+    this.props.history.push({pathname: `/singer/${item.id}`, state: {singer: item}})
   }
 
   render() {
     return (
-      <div className="singer scroll-view">
+      <div className="singer scroll-view fixed-container" ref="singer">
         <ListView
           selectItem={this.selectSinger}
           singerList={this.props.singerList}
-          shortCutList={this.props.shortCutList}/>
-        <Route path='/singer/:id' exact component={SingerDetail}/>
+          shortCutList={this.props.shortCutList} />
+        <Route path='/singer/:id' exact component={SingerDetail} />
       </div>
     )
   }
@@ -37,7 +41,8 @@ class Singer extends PureComponent {
 
 const mapStateToProps = state => ({
   singerList: state.singer.list,
-  shortCutList: state.singer.shortCutList
+  shortCutList: state.singer.shortCutList,
+  playList: state.player.playList
 })
 const mapDispatchToProps = dispatch => ({
   getSingerList() {

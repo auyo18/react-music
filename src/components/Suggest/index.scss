@@ -1,0 +1,119 @@
+@import "../../assets/styles/mixin";
+
+.search {
+  .suggest-wrapper {
+    position: fixed;
+    width: 100%;
+    top: 160px;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+
+    .suggest {
+      background-color: $color-background;
+      padding: 0 10px;
+
+      .list {
+        & > .singer {
+          @include flex();
+          align-items: center;
+          position: relative;
+
+          &:after {
+            content: "";
+            position: absolute;
+            right: 8px;
+            width: 6px;
+            height: 6px;
+            border-bottom: 1px solid $color-text-l;
+            border-right: 1px solid $color-text-l;
+            -ms-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+          }
+
+          .avatar {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            border-radius: 60px;
+            margin: 10px;
+            overflow: hidden;
+          }
+
+          .text {
+            .name {
+              font-size: $font-size-medium-x;
+              @include no-wrap();
+            }
+          }
+
+          .desc {
+            color: $color-text-l;
+            font-size: $font-size-small;
+            @include no-wrap();
+          }
+        }
+
+        .item {
+          @include flex();
+          align-items: center;
+          height: 55px;
+
+          .icon {
+            width: 56px;
+            height: 40px;
+            text-align: center;
+
+            i.iconfont {
+              color: $color-text;
+              font-size: $font-size-large-xx;
+              background-color: $color-theme;
+              padding: 5px;
+              border-radius: 10px;
+            }
+          }
+
+          .text {
+            flex: 1;
+            overflow: hidden;
+
+            .name {
+              font-size: $font-size-medium-x;
+              @include no-wrap();
+            }
+
+            .singer {
+              color: $color-text-l;
+              font-size: $font-size-small;
+              @include no-wrap();
+            }
+          }
+        }
+      }
+
+      .loading-container {
+        position: relative;
+      }
+
+      .no-more {
+        text-align: center;
+        color: $color-text-l;
+        padding: 20px 0;
+      }
+    }
+
+    .no-result-wrapper {
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+
+      .no-result {
+        text-align: center;
+        font-size: 14px;
+        color: $color-text-l;
+      }
+    }
+  }
+}

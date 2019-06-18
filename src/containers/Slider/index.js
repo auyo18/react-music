@@ -1,8 +1,8 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import BetterScroll from 'better-scroll'
 import './index.scss'
 
-class Slider extends Component {
+class Slider extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -29,22 +29,24 @@ class Slider extends Component {
   }
 
   setSliderWidth = (isResize) => {
-    this.children = this.refs.sliderGroup.children
-    this.sliderLength = this.children.length
-    let width = 0
-    let sliderWidth = this.refs.slider.clientWidth
-    for (let i = 0; i < this.sliderLength; i++) {
-      let child = this.children[i]
-      child.classList.add('slider-item')
-      child.style.width = sliderWidth + 'px'
-      width += sliderWidth
-    }
+    if (this.refs.sliderGroup) {
+      this.children = this.refs.sliderGroup.children
+      this.sliderLength = this.children.length
+      let width = 0
+      let sliderWidth = this.refs.slider.clientWidth
+      for (let i = 0; i < this.sliderLength; i++) {
+        let child = this.children[i]
+        child.classList.add('slider-item')
+        child.style.width = sliderWidth + 'px'
+        width += sliderWidth
+      }
 
-    if (this.props.loop && !isResize) {
-      width += 2 * sliderWidth
-    }
+      if (this.props.loop && !isResize) {
+        width += 2 * sliderWidth
+      }
 
-    this.refs.sliderGroup.style.width = width + 'px'
+      this.refs.sliderGroup.style.width = width + 'px'
+    }
   }
 
   initDots = () => {

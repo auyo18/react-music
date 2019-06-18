@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import Scroll from "../Scroll"
 import {getData} from "../../utils/dom"
 import './index.scss'
@@ -6,7 +6,7 @@ import './index.scss'
 const ANCHOR_HEIGHT = 18
 const TITLE_HEIGHT = 41
 
-class ListView extends Component {
+class ListView extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {

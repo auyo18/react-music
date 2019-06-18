@@ -3,6 +3,7 @@ import Scroll from '../../containers/Scroll'
 import SongList from '../../containers/SongList'
 import Loading from '../../containers/Loading'
 import './index.scss'
+import {connect} from "react-redux"
 
 const HEADER_HEIGHT = 300
 
@@ -10,6 +11,10 @@ class MusicList extends PureComponent {
   componentWillMount() {
     this.probeType = 3
     this.listenScroll = true
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    this.refs.listWrapper.style.bottom = nextProps.playList.length > 0 ? '50px' : ''
   }
 
   back = () => {
@@ -41,7 +46,7 @@ class MusicList extends PureComponent {
 
   render() {
     const {singer, songList} = this.props
-    singer.avatar = singer.avatar && singer.avatar.replace('150x150', '500x500')
+    singer && (singer.avatar = singer.avatar && singer.avatar.replace('150x150', '500x500').replace('300x300', '500x500'))
     return (
       <div className="music-list">
         <div className="header" ref="header">
@@ -49,9 +54,10 @@ class MusicList extends PureComponent {
             <i className="iconfont iconfanhui5" />
           </div>
           <h1 className="title">
-            {singer.name}
+            {singer && singer.name}
           </h1>
-          <div className="bg-image" ref="bgImage" style={singer.avatar && {backgroundImage: `url(${singer.avatar})`}}>
+          <div className="bg-image" ref="bgImage"
+               style={singer && singer.avatar ? {backgroundImage: `url(${singer.avatar})`} : {}}>
             <div className="mask" ref="mask" />
             <div className="play-btn-wrapper" ref="playBtnWrapper">
               <div className="play">
@@ -61,9 +67,9 @@ class MusicList extends PureComponent {
             </div>
           </div>
         </div>
-        <div className="list-wrapper scroll-view">
+        <div className="list-wrapper scroll-view" ref="listWrapper">
           {
-            songList.length ?
+            songList && songList.length ?
               <Scroll
                 probeType={this.probeType}
                 listenScroll={this.listenScroll}
@@ -82,4 +88,7 @@ class MusicList extends PureComponent {
   }
 }
 
-export default MusicList
+const mapStateToProps = state => ({
+  playList: state.player.playList
+})
+export default connect(mapStateToProps, null)(MusicList)

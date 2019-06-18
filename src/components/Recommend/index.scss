@@ -29,6 +29,10 @@
           @include no-wrap();
         }
 
+        dd {
+          color: $color-text-l;
+        }
+
         dt, dd {
           padding: 0 5px;
         }

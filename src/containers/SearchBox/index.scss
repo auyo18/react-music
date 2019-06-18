@@ -1,0 +1,32 @@
+@import "../../assets/styles/mixin";
+
+.search-box-wrapper {
+  padding: 10px;
+
+  .search-box {
+    @include flex();
+    background-color: $color-background-b;
+    height: 40px;
+    padding: 0 15px;
+    align-items: center;
+    border-radius: 30px;
+
+    i.iconfont {
+      color: $color-text-l;
+
+      &.delete {
+        padding: 5px 10px;
+        margin-right: -5px;
+      }
+    }
+
+    .search-input {
+      flex: 1;
+      width: 100%;
+      background-color: $color-background-b;
+      padding: 10px;
+      font-size: $font-size-medium;
+      height: 20px;
+    }
+  }
+}

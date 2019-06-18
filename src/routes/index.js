@@ -33,12 +33,19 @@ const NotFound = Loadable({
   timeout: 10000
 })
 
+const User =Loadable({
+  loader: () => import('../components/User'),
+  loading: Loading,
+  timeout: 10000
+})
+
 const routes = (
   <Switch>
     <Route path="/recommend" component={Recommend} />
     <Route path="/singer" component={Singer} />
-    <Route path="/rank" exact component={Rank} />
-    <Route path="/search" exact component={Search} />
+    <Route path="/rank" component={Rank} />
+    <Route path="/search" component={Search} />
+    <Route path="/user" exact component={User} />
     <Redirect from="/" to="/recommend" exact />
     <Route component={NotFound} />
   </Switch>

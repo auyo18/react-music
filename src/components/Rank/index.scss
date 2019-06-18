@@ -1,0 +1,66 @@
+@import "../../assets/styles/mixin";
+
+.rank {
+  background-color: $color-background-b;
+
+  .top-list-container {
+    .top-list {
+      padding: 10px;
+
+      .top-list-item {
+        @include flex();
+        background-color: $color-background;
+        margin-top: 10px;
+
+        .image {
+          position: relative;
+
+          img {
+            display: block;
+            width: 100px;
+            max-width: none;
+            height: 100px;
+          }
+        }
+
+        .info {
+          @include flex($direction: column);
+          justify-content: center;
+          flex: 1;
+          overflow: hidden;
+          padding: 0 15px;
+          position: relative;
+
+          &:after {
+            content: "";
+            position: absolute;
+            right: 8px;
+            width: 6px;
+            height: 6px;
+            border-bottom: 1px solid $color-text-l;
+            border-right: 1px solid $color-text-l;
+            transform: rotate(-45deg);
+          }
+
+          .title {
+            @include no-wrap();
+            font-size: $font-size-medium-x;
+            margin-bottom: 5px;
+          }
+
+          p {
+            @include no-wrap();
+            font-size: $font-size-medium;
+            color: $color-background-l;
+
+            span {
+              color: $color-text;
+              margin-left: 8px;
+              margin-right: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

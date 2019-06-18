@@ -1,4 +1,4 @@
-@import "./variable";
+@import "./mixin";
 
 * {
   box-sizing: border-box;
@@ -23,10 +23,16 @@ img {
   max-width: 100%;
 }
 
+.fixed-container {
+  max-width: $max-width;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
+
 .scroll-view {
   position: fixed;
   width: 100%;
-  max-width: $max-width;
   top: 103px;
   bottom: 0;
 }
@@ -35,6 +41,11 @@ img {
   height: 100%;
   position: relative;
   overflow: hidden;
+}
+
+.music-list-wrapper{
+  @include mask($position: fixed, $bgCol: $color-background);
+  z-index: 101;
 }
 
 .slide.enter {

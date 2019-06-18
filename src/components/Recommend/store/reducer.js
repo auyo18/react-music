@@ -5,15 +5,16 @@ const defaultState = {
   list: []
 }
 
-export default (state = defaultState, actions) => {
-  const newState = JSON.parse(JSON.stringify(state))
-  switch (actions.type) {
+export default (state = defaultState, action) => {
+  switch (action.type) {
     case types.SET_RECOMMEND_SLIDER:
-      newState.slider=actions.slider
-      return newState
+      return Object.assign({}, state, {
+        slider: action.slider
+      })
     case types.SET_RECOMMEND_LIST:
-      newState.list = actions.list
-      return newState
+      return Object.assign({}, state, {
+        list: action.list
+      })
     default:
       return state
   }

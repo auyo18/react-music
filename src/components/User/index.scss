@@ -1,5 +1,53 @@
 @import "../../assets/styles/mixin";
 
 .user-wrapper {
-  @include mask($bgCol: $color-background);
+  @include mask($position: fixed, $bgCol: $color-background);
+
+  .header {
+    margin: 10px 0;
+
+    .back {
+      padding: 0 16px;
+      position: absolute;
+      line-height: 1;
+
+      i.iconfont {
+        font-size: $font-size-large-xx;
+      }
+    }
+
+    .title {
+      font-size: $font-size-large;
+      text-align: center;
+    }
+  }
+
+  .switches-wrapper {
+    padding: 10px;
+  }
+
+  .play-btn {
+    text-align: center;
+  }
+
+  .scroll-view {
+    top: 123px;
+
+    .scroll-content {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background-color: white;
+
+      .tip {
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        transform: translateY(-50%);
+        color: $color-text-l;
+      }
+    }
+  }
 }

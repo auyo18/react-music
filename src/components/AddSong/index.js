@@ -29,7 +29,6 @@ class AddSong extends PureComponent {
   }
 
   changeSwitchIndex = index => {
-    console.log(index)
     this.setState(() => ({
       switchIndex: index
     }))

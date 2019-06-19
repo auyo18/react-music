@@ -5,6 +5,8 @@ import MusicList from '../../components/MusicList'
 import {CreateSong} from "../../utils/singer"
 import {connect} from "react-redux"
 
+const time = 300
+
 class SingerDetail extends PureComponent {
   constructor(props) {
     super(props)
@@ -61,7 +63,7 @@ class SingerDetail extends PureComponent {
         } else {
           this.props.history.push('/singer')
         }
-      }, 300)
+      }, time)
     })
   }
 
@@ -70,11 +72,11 @@ class SingerDetail extends PureComponent {
     return (
       <CSSTransition
         in={this.state.show}
-        timeout={300}
+        timeout={time}
         className="slide music-list-wrapper fixed-container"
       >
         <div>
-          <MusicList back={this.back} singer={this.state.singer} songList={this.state.songList}/>
+          <MusicList back={this.back} singer={this.state.singer} songList={this.state.songList} />
         </div>
       </CSSTransition>
     )

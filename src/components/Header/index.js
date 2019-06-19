@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react'
 import {connect} from "react-redux"
+import {withRouter} from 'react-router-dom'
 import {songtype, songmid} from "../../config"
 import {getVKey} from "../../api/song"
 import {setVKey} from "../Player/store/actions"
@@ -23,12 +24,16 @@ class Header extends PureComponent {
     }
   }
 
+  goUser = () => {
+    this.props.history.push({pathname: '/user', state: {entry: true}})
+  }
+
   render() {
     return (
       <header className="header">
-        <div className="logo"/>
+        <div className="logo" />
         <h1>聚力音乐</h1>
-        <i className="iconfont icongeren"/>
+        <i className="iconfont icongeren" onClick={this.goUser} />
       </header>
     )
   }
@@ -40,4 +45,4 @@ const mapDispatchToProps = dispatch => ({
   }
 })
 
-export default connect(null, mapDispatchToProps)(Header)
+export default connect(null, mapDispatchToProps)(withRouter(Header))

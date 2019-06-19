@@ -23,10 +23,6 @@ class Suggest extends PureComponent {
     this.noMore = false
   }
 
-  componentDidMount() {
-    console.log(this.props)
-  }
-
   componentWillReceiveProps(nextProps, nextContext) {
     this.page = 1
     this.noMore = false

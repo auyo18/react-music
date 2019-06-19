@@ -23,7 +23,7 @@ class Slider extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.slider.disable()
+    this.slider && this.slider.disable()
     clearTimeout(this.timer)
     window.removeEventListener('resize', this.resize)
   }
@@ -107,7 +107,7 @@ class Slider extends PureComponent {
         <div className="dots">
           {
             this.state.dots.map((dot, index) => (
-              <span key={index} className={`dot ${this.state.currentPageIndex === index ? 'active' : ''}`}/>
+              <span key={index} className={`dot ${this.state.currentPageIndex === index ? 'active' : ''}`} />
             ))
           }
         </div>

@@ -4,9 +4,9 @@ import {Route} from 'react-router-dom'
 import Slider from '../../containers/Slider'
 import Scroll from '../../containers/Scroll'
 import {getRecommendList, getRecommendSlider} from "./store/actions"
-import './index.scss'
 import Loadable from "react-loadable"
 import Loading from "../../containers/Loading"
+import './index.scss'
 
 const Disc = Loadable({
   loader: () => import('../Disc'),

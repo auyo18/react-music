@@ -14,8 +14,15 @@ class PlayList extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    console.log(nextProps.currentIndex)
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.sequenceList.length) {
+      this.scrollToCurrent()
+    }
+  }
+
+  scrollToCurrent = () => {
+    const index = this.props.sequenceList.findIndex(song => song.id === this.props.currentSong.id)
+    this.refs.scroll.scrollToElement([this.refs.itemBox.children[index - 2], 1000])
   }
 
   hidePlayList = () => {
@@ -32,6 +39,10 @@ class PlayList extends PureComponent {
     this.setState(() => ({
       showAddSong: false
     }))
+  }
+
+  isFavorite = id => {
+    return this.props.favoriteList.findIndex(item => item.id === id) > -1
   }
 
   render() {
@@ -53,11 +64,11 @@ class PlayList extends PureComponent {
               {playMode[mode].title}
               <span style={playMode[mode].name === 'loop' ? {display: 'none'} : {}}>({playList.length}首)</span>
             </p>
-            <i className="iconfont iconshanchu1"/>
+            <i className="iconfont iconshanchu1" style={{display: 'none'}}/>
           </div>
           <div className="playlist-content-wrapper">
-            <Scroll className="playlist-content-container" data={sequenceList}>
-              <div>
+            <Scroll ref="scroll" className="playlist-content-container" data={sequenceList}>
+              <div ref="itemBox">
                 {
                   sequenceList.map((song, index) => (
                     <div
@@ -70,7 +81,12 @@ class PlayList extends PureComponent {
                         <span>{song.name}</span> - {song.singer}
                       </p>
                       <i className={`play iconfont ${song.id === currentSong.id ? 'iconyouyinpin' : ''}`}/>
-                      <i className="iconfont iconxihuan1"/>
+                      <i
+                        onClick={e => {
+                          e.stopPropagation()
+                          this.props.toggleFavorite(song)
+                        }}
+                        className={`iconfont ${this.isFavorite(song.id) ? 'like iconxihuan' : 'iconxihuan1'}`}/>
                       <i className="iconfont iconshanchu2" onClick={e => {
                         e.stopPropagation()
                         deleteSong(song.id, currentIndex, playList, sequenceList)
@@ -103,7 +119,8 @@ const mapStateToProps = state => ({
   sequenceList: state.player.sequenceList,
   playList: state.player.playList,
   currentIndex: state.player.currentIndex,
-  currentSong: state.player.playList[state.player.currentIndex] || {}
+  currentSong: state.player.playList[state.player.currentIndex] || {},
+  favoriteList: state.player.favoriteList
 })
 const mapDispatchToProps = dispatch => ({
   deleteSong(id, currentIndex, playList, sequenceList) {
@@ -123,7 +140,6 @@ const mapDispatchToProps = dispatch => ({
   },
   selectSong(song, index, mode, playList) {
     if (playMode[mode].name === 'random') {
-      console.log(index)
       index = playList.findIndex(item => item.id === song.id)
     }
     dispatch(setCurrentIndex(index))

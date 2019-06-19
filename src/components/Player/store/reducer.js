@@ -9,13 +9,16 @@ const playHistory = JSON.parse(storage[PLAY_HISTORY_KEY] || "[]")
 const FAVORITE_LIST_KEY = '__FAVORITE__'
 const favoriteList = JSON.parse(storage[FAVORITE_LIST_KEY] || "[]")
 
+const MODE_KEY = '__MODE__'
+const mode = storage[MODE_KEY] || playMode[0].code
+
 const defaultState = {
   singer: {}, // 歌手信息
   playing: false, // 播放状态
   fullScreen: false, // 播放器展开状态
   playList: [], // 播放列表
   sequenceList: [], // 歌曲列表
-  mode: playMode[0].code, // 播放模式
+  mode, // 播放模式
   currentIndex: -1, // 当前播放歌曲索引,
   vKey: [], // 歌曲播放权限 vKey,
   playHistory, //播放历史
@@ -44,6 +47,7 @@ export default (state = defaultState, action) => {
         playList: action.playList
       })
     case types.SET_PLAY_MODE:
+      storage[MODE_KEY] = action.mode
       return Object.assign({}, state, {
         mode: action.mode
       })

@@ -2,8 +2,11 @@ import React, {PureComponent} from 'react'
 import Scroll from '../../containers/Scroll'
 import SongList from '../../containers/SongList'
 import Loading from '../../containers/Loading'
-import './index.scss'
 import {connect} from "react-redux"
+import {shuffle} from "../../utils"
+import {setPlayList, setSequenceList, setCurrentIndex, setFullScreen, setPlayMode} from "../Player/store/actions"
+import {playMode} from "../../config"
+import './index.scss'
 
 const HEADER_HEIGHT = 300
 
@@ -43,6 +46,9 @@ class MusicList extends PureComponent {
       this.refs.mask.style.opacity = `${Math.min(scale * .8 + 0.2, .9)}`
     }
   }
+  randomPlay = () => {
+
+  }
 
   render() {
     const {singer, songList} = this.props
@@ -60,7 +66,9 @@ class MusicList extends PureComponent {
                style={singer && singer.avatar ? {backgroundImage: `url(${singer.avatar})`} : {}}>
             <div className="mask" ref="mask" />
             <div className="play-btn-wrapper" ref="playBtnWrapper">
-              <div className="play">
+              <div className="play" onClick={() => {
+                this.props.randomPlay(songList)
+              }}>
                 <i className="iconfont iconbofang1" />
                 <span>随机播放全部</span>
               </div>
@@ -91,4 +99,17 @@ class MusicList extends PureComponent {
 const mapStateToProps = state => ({
   playList: state.player.playList
 })
-export default connect(mapStateToProps, null)(MusicList)
+
+const mapDispatchToProps = dispatch => ({
+  randomPlay(songList) {
+    let list = shuffle(songList)
+    const mode = playMode.findIndex(item => item.name === 'random')
+    dispatch(setPlayMode(mode))
+    dispatch(setSequenceList(songList))
+    dispatch(setPlayList(list))
+    dispatch(setCurrentIndex(0))
+    dispatch(setFullScreen(true))
+  }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(MusicList)

@@ -8,7 +8,7 @@ import Player from './components/Player'
 import store from './store'
 import './app.scss'
 
-const App = () => (
+const App = props => (
   <Provider store={store}>
     <Router>
       <div id="app">

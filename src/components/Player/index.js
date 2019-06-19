@@ -15,12 +15,12 @@ import {playMode} from "../../config"
 import {shuffle, addZero} from "../../utils"
 import Toast from '../../containers/Toast'
 import PlayList from '../PlayList'
-import defaultImage from '../../assets/images/default.png'
 import {getLyric} from "../../api/song"
 import {Base64} from 'js-base64'
 import Lyric from 'lyric-parser'
 import Scroll from '../../containers/Scroll'
 import ProgressBar from '../../containers/ProgressBar'
+import defaultImage from '../../assets/images/default.png'
 
 const PLAY_HISTORY_MAX_LENGTH = 200
 
@@ -57,16 +57,12 @@ class Player extends PureComponent {
   watchPlaying = (currentSong, playing) => {
     const {audio} = this.refs
     playing ? audio.play() : audio.pause()
-    if (this.state.lyric) {
-      this.state.lyric.togglePlay()
-    }
+    this.state.lyric && this.state.lyric.togglePlay()
   }
 
   watchCurrentSong = (oldSong, newSong) => {
     if (oldSong.id === newSong.id || !newSong.url) return
-    if (this.state.lyric) {
-      this.state.lyric.stop()
-    }
+    this.state.lyric && this.state.lyric.stop()
     this.refs.audio.play()
     this.play()
     this.props.setPlayHistory(newSong, this.props.playHistory)
@@ -235,17 +231,17 @@ class Player extends PureComponent {
     this.progressBarMove = state
   }
 
-  isFavorite = () => {
-    return this.props.favoriteList.findIndex(item => item.id === this.props.currentSong.id)
+  isFavorite = song => {
+    return this.props.favoriteList.findIndex(item => item.id === song.id)
   }
 
-  toggleFavorite = () => {
+  toggleFavorite = song => {
     let favoriteList = this.props.favoriteList.slice()
-    const index = this.isFavorite()
+    const index = this.isFavorite(song)
     if (index > -1) {
       favoriteList.splice(index, 1)
     } else {
-      favoriteList.push(this.props.currentSong)
+      favoriteList.unshift(song)
     }
 
     this.props.setFavoriteList(favoriteList)
@@ -355,10 +351,10 @@ class Player extends PureComponent {
                     <i className="iconfont mode iconqianjin" onClick={this.nextSong}/>
                   </div>
                   <div className="icon right">
-                    <i className={`iconfont ${this.isFavorite() > -1 ? 'like iconxihuan' : 'iconxihuan1'}`}
+                    <i className={`iconfont ${this.isFavorite(currentSong) > -1 ? 'like iconxihuan' : 'iconxihuan1'}`}
                        onClick={e => {
                          e.stopPropagation()
-                         this.toggleFavorite()
+                         this.toggleFavorite(currentSong)
                        }}/>
                   </div>
                 </div>
@@ -408,7 +404,8 @@ class Player extends PureComponent {
             <PlayList
               show={this.state.playListShow}
               hidePlayList={this.hidePlayList}
-              changeMode={this.props.changeMode}/>
+              changeMode={this.props.changeMode}
+              toggleFavorite={this.toggleFavorite}/>
             <audio
               ref="audio"
               src={currentSong.url}

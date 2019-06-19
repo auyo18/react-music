@@ -69,10 +69,10 @@ class Search extends PureComponent {
 
   setHotKeyHeight = () => {
     if (this.refs.hotKeyContent && this.refs.hotKeyContent.clientHeight > (this.refs.hotKeyContent.children[0].clientHeight + MARGIN_BOTTOM) * ROW_NUM) {
-      const hotKey = this.state.hotKey
+      const hotKey = this.state.hotKey.slice()
       hotKey.pop()
       this.setState(() => ({
-        hotKey: hotKey
+        hotKey
       }))
     }
   }
@@ -88,7 +88,7 @@ class Search extends PureComponent {
       <div className="search">
         <SearchBox
           keyword={this.state.keyword}
-          changeKeyword={this.changeKeyword}/>
+          changeKeyword={this.changeKeyword} />
         <div ref="suggestWrapper" className="scroll-view fixed-container suggest-wrapper"
              style={this.state.keyword ? {} : {display: 'none'}}>
           <Suggest
@@ -122,14 +122,14 @@ class Search extends PureComponent {
               <div className="search-history">
                 <div className="header">
                   <h2 className="title">搜索历史</h2>
-                  <i className="iconfont iconshanchu1"/>
+                  <i className="iconfont iconshanchu1" style={{display: 'none'}} />
                 </div>
-                <SearchHistory changeKeyword={this.changeKeyword}/>
+                <SearchHistory changeKeyword={this.changeKeyword} />
               </div>
             </div>
           </Scroll>
         </div>
-        <Route path='/search/:id' exact component={SingerDetail}/>
+        <Route path='/search/:id' exact component={SingerDetail} />
       </div>
     )
   }

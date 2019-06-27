@@ -1,13 +1,11 @@
 import types from './types'
-import {playMode} from "../../../config"
+import {playMode,storageKey} from "../../../config"
 
 const storage = window.localStorage
 
-const PLAY_HISTORY_KEY = '__PLAY__'
-const playHistory = JSON.parse(storage[PLAY_HISTORY_KEY] || "[]")
+const playHistory = JSON.parse(storage[storageKey.PLAY_HISTORY_KEY] || "[]")
 
-const FAVORITE_LIST_KEY = '__FAVORITE__'
-const favoriteList = JSON.parse(storage[FAVORITE_LIST_KEY] || "[]")
+const favoriteList = JSON.parse(storage[storageKey.FAVORITE_LIST_KEY] || "[]")
 
 const MODE_KEY = '__MODE__'
 const mode = storage[MODE_KEY] || playMode[0].code
@@ -64,12 +62,12 @@ export default (state = defaultState, action) => {
         vKey: action.vKey
       })
     case types.SET_PLAY_HISTORY:
-      storage[PLAY_HISTORY_KEY] = JSON.stringify(action.playHistory)
+      storage[storageKey.PLAY_HISTORY_KEY] = JSON.stringify(action.playHistory)
       return Object.assign({}, state, {
         playHistory: action.playHistory
       })
     case types.SET_FAVORITE_LIST:
-      storage[FAVORITE_LIST_KEY] = JSON.stringify(action.favoriteList)
+      storage[storageKey.FAVORITE_LIST_KEY] = JSON.stringify(action.favoriteList)
       return Object.assign({}, state, {
         favoriteList: action.favoriteList
       })

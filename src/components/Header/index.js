@@ -1,10 +1,12 @@
 import React, {PureComponent} from 'react'
 import {connect} from "react-redux"
 import {withRouter} from 'react-router-dom'
-import {songtype, songmid} from "../../config"
+import {songtype, songmid, storageKey} from "../../config"
 import {getVKey} from "../../api/song"
-import {setVKey} from "../Player/store/actions"
+import {setVKey, setPlayHistory, setFavoriteList} from "../Player/store/actions"
 import './index.scss'
+
+const storage = window.localStorage
 
 class Header extends PureComponent {
 
@@ -21,6 +23,23 @@ class Header extends PureComponent {
     if (vKey.length) {
       vKey = vKey.filter(item => item.trim().length)
       this.props.setVKey(vKey)
+      if (!storage[storageKey.PLAY_HISTORY_KEY]) return
+      let playHistory = JSON.parse(storage[storageKey.PLAY_HISTORY_KEY])
+      if (playHistory.length) {
+        playHistory.forEach(item => {
+          item.url = item.url.replace(item.url.match(/vkey=(\w*)&/)[1], vKey[Math.round(Math.random() * (vKey.length - 1))])
+        })
+        this.props.setPlayHistory(playHistory)
+      }
+
+      if (!storage[storageKey.FAVORITE_LIST_KEY]) return
+      let favoriteList = JSON.parse(storage[storageKey.FAVORITE_LIST_KEY])
+      if (favoriteList.length) {
+        favoriteList.forEach(item => {
+          item.url = item.url.replace(item.url.match(/vkey=(\w*)&/)[1], vKey[Math.round(Math.random() * (vKey.length - 1))])
+        })
+        this.props.setFavoriteList(favoriteList)
+      }
     }
   }
 
@@ -31,9 +50,9 @@ class Header extends PureComponent {
   render() {
     return (
       <header className="header">
-        <div className="logo" />
+        <div className="logo"/>
         <h1>聚力音乐</h1>
-        <i className="iconfont icongeren" onClick={this.goUser} />
+        <i className="iconfont icongeren" onClick={this.goUser}/>
       </header>
     )
   }
@@ -42,6 +61,12 @@ class Header extends PureComponent {
 const mapDispatchToProps = dispatch => ({
   setVKey(vKey) {
     dispatch(setVKey(vKey))
+  },
+  setPlayHistory(playHistory) {
+    dispatch(setPlayHistory(playHistory))
+  },
+  setFavoriteList(favoriteList) {
+    dispatch(setFavoriteList(favoriteList))
   }
 })
 

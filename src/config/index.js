@@ -37,3 +37,8 @@ export const playMode = [
     icon: 'iconsuijibofang'
   },
 ]
+
+export const storageKey = {
+  PLAY_HISTORY_KEY: '__PLAY__',
+  FAVORITE_LIST_KEY: '__FAVORITE__'
+}

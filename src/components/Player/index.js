@@ -319,9 +319,9 @@ class Player extends PureComponent {
                   <div className="progress-bar-wrapper">
                     <ProgressBar
                       percent={this.state.percent}
-                      interval={this.props.currentSong.interval}
+                      interval={currentSong.interval}
                       updateSongTime={this.updateSongTime}
-                      setPlayingState={this.props.setPlayingState}
+                      setPlayingState={setPlayingState}
                       changeProgressBarMoveState={this.changeProgressBarMoveState}
                     />
                   </div>
@@ -404,7 +404,7 @@ class Player extends PureComponent {
             <PlayList
               show={this.state.playListShow}
               hidePlayList={this.hidePlayList}
-              changeMode={this.props.changeMode}
+              changeMode={changeMode}
               toggleFavorite={this.toggleFavorite}/>
             <audio
               ref="audio"

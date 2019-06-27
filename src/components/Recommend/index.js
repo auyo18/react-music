@@ -33,19 +33,22 @@ class Recommend extends PureComponent {
   }
 
   render() {
+    const {
+      recommendList, recommendSlider,history
+    } = this.props
     return (
       <div className="recommend scroll-view fixed-container" ref="recommend">
-        <Scroll className="scroll-content" data={this.props.recommendList}>
+        <Scroll className="scroll-content" data={recommendList}>
           <div>
             <div className="slider-wrapper">
               {
                 // 当 slider 有数据后再渲染 Slider组件
-                this.props.recommendSlider.length > 0 &&
+                recommendSlider.length > 0 &&
                 <Slider>
                   {
-                    this.props.recommendSlider.map(slider => (
+                    recommendSlider.map(slider => (
                       <div key={slider.id}>
-                        <img src={slider.picUrl} alt="" />
+                        <img src={slider.picUrl} alt=""/>
                       </div>
                     ))
                   }
@@ -58,11 +61,11 @@ class Recommend extends PureComponent {
               </h2>
               <div className="list-container">
                 {
-                  this.props.recommendList.map(item => (
+                  recommendList.map(item => (
                     <dl key={item.dissid} onClick={() => {
-                      this.props.history.push({pathname: `/recommend/${item.dissid}`, state: {disc: item}})
+                      history.push({pathname: `/recommend/${item.dissid}`, state: {disc: item}})
                     }}>
-                      <img src={item.imgurl} alt="" />
+                      <img src={item.imgurl} alt=""/>
                       <dt>{item.dissname}</dt>
                       <dd>{item.creator.name}</dd>
                     </dl>
@@ -72,7 +75,7 @@ class Recommend extends PureComponent {
             </div>
           </div>
         </Scroll>
-        <Route path={'/recommend/:id'} exact component={Disc} />
+        <Route path={'/recommend/:id'} exact component={Disc}/>
       </div>
     )
   }

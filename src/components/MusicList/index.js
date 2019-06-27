@@ -51,25 +51,25 @@ class MusicList extends PureComponent {
   }
 
   render() {
-    const {singer, songList} = this.props
+    const {singer, songList, randomPlay} = this.props
     singer && (singer.avatar = singer.avatar && singer.avatar.replace('150x150', '500x500').replace('300x300', '500x500'))
     return (
       <div className="music-list">
         <div className="header" ref="header">
           <div className="back" onClick={this.back}>
-            <i className="iconfont iconfanhui5" />
+            <i className="iconfont iconfanhui5"/>
           </div>
           <h1 className="title">
             {singer && singer.name}
           </h1>
           <div className="bg-image" ref="bgImage"
                style={singer && singer.avatar ? {backgroundImage: `url(${singer.avatar})`} : {}}>
-            <div className="mask" ref="mask" />
+            <div className="mask" ref="mask"/>
             <div className="play-btn-wrapper" ref="playBtnWrapper">
               <div className="play" onClick={() => {
-                this.props.randomPlay(songList)
+                randomPlay(songList)
               }}>
-                <i className="iconfont iconbofang1" />
+                <i className="iconfont iconbofang1"/>
                 <span>随机播放全部</span>
               </div>
             </div>
@@ -87,8 +87,8 @@ class MusicList extends PureComponent {
                 }}
                 className="scroll-content"
               >
-                <SongList songList={songList} />
-              </Scroll> : <Loading />
+                <SongList songList={songList}/>
+              </Scroll> : <Loading/>
           }
         </div>
       </div>

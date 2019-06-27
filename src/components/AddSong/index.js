@@ -35,8 +35,10 @@ class AddSong extends PureComponent {
   }
 
   render() {
+    const {showAddSong, history, playHistory, searchHistory} = this.props
+    const {keyword, searchResults, switches, switchIndex} = this.state
     return (
-      <div className={`add-song fixed-container ${this.props.showAddSong ? 'show' : 'hide'}`}>
+      <div className={`add-song fixed-container ${showAddSong ? 'show' : 'hide'}`}>
         <div className="header">
           <h2 className="title">添加歌曲到列表</h2>
           <div className="close" onClick={e => {
@@ -48,32 +50,32 @@ class AddSong extends PureComponent {
         </div>
         <div className="search">
           <SearchBox
-            keyword={this.state.keyword}
+            keyword={keyword}
             changeKeyword={this.changeKeyword}/>
           <div className="scroll-view fixed-container suggest-wrapper"
-               style={this.state.keyword ? {} : {display: 'none'}}>
+               style={keyword ? {} : {display: 'none'}}>
             <Suggest
-              keyword={this.state.keyword}
-              searchResults={this.state.searchResults}
-              history={this.props.history}
-              style={this.state.keyword ? {} : {display: 'none'}}/>
+              keyword={keyword}
+              searchResults={searchResults}
+              history={history}
+              style={keyword ? {} : {display: 'none'}}/>
           </div>
         </div>
-        <div className="shortcut" style={this.state.keyword ? {visibility: 'hidden'} : {}}>
+        <div className="shortcut" style={keyword ? {visibility: 'hidden'} : {}}>
           <Switches
-            switches={this.state.switches}
-            currentIndex={this.state.switchIndex}
+            switches={switches}
+            currentIndex={switchIndex}
             changeSwitchIndex={this.changeSwitchIndex}/>
 
           <div className="scroll-view fixed-container shortcut-box">
-            <Scroll className="scroll-content" data={this.props.playHistory}
-                    style={this.state.switchIndex === 0 ? {} : {visibility: 'hidden'}}>
+            <Scroll className="scroll-content" data={playHistory}
+                    style={switchIndex === 0 ? {} : {visibility: 'hidden'}}>
               <div className="play-history-wrapper">
-                <SongList songList={this.props.playHistory}/>
+                <SongList songList={playHistory}/>
               </div>
             </Scroll>
-            <Scroll className="scroll-content" data={this.props.searchHistory}
-                    style={this.state.switchIndex === 1 ? {} : {visibility: 'hidden'}}>
+            <Scroll className="scroll-content" data={searchHistory}
+                    style={switchIndex === 1 ? {} : {visibility: 'hidden'}}>
               <div className="search-history-wrapper">
                 <SearchHistory changeKeyword={this.changeKeyword}/>
               </div>

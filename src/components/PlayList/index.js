@@ -15,7 +15,7 @@ class PlayList extends PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.sequenceList.length) {
+    if (this.props.currentSong.id !== prevProps.currentSong.id || this.props.show !== prevProps.show) {
       this.scrollToCurrent()
     }
   }
@@ -46,7 +46,7 @@ class PlayList extends PureComponent {
   }
 
   render() {
-    const {show, mode, sequenceList, playList, currentSong, currentIndex, deleteSong, selectSong} = this.props
+    const {show, mode, sequenceList, playList, currentSong, currentIndex, deleteSong, selectSong, changeMode, toggleFavorite} = this.props
     return (
       <div className={`playlist ${show ? 'show' : 'hide'}`} onClick={() => {
         this.hidePlayList()
@@ -56,10 +56,10 @@ class PlayList extends PureComponent {
         }}>
           <div className="list-header">
             <i className={`iconfont ${playMode[mode].icon}`} onClick={() => {
-              this.props.changeMode(mode, playList, sequenceList, currentSong.id)
+              changeMode(mode, playList, sequenceList, currentSong.id)
             }}/>
             <p className="name" onClick={() => {
-              this.props.changeMode(mode, playList, sequenceList, currentSong.id)
+              changeMode(mode, playList, sequenceList, currentSong.id)
             }}>
               {playMode[mode].title}
               <span style={playMode[mode].name === 'loop' ? {display: 'none'} : {}}>({playList.length}首)</span>
@@ -84,7 +84,7 @@ class PlayList extends PureComponent {
                       <i
                         onClick={e => {
                           e.stopPropagation()
-                          this.props.toggleFavorite(song)
+                          toggleFavorite(song)
                         }}
                         className={`iconfont ${this.isFavorite(song.id) ? 'like iconxihuan' : 'iconxihuan1'}`}/>
                       <i className="iconfont iconshanchu2" onClick={e => {
